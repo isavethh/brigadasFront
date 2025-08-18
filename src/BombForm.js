@@ -112,7 +112,7 @@ const NumberInput = ({ value, onChange, min = 0, className = '', ...props }) => 
 const BombForm = () => {
     const [activeSection, setActiveSection] = useState('info');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState({ success: null, message: '' });
+    const [submitStatus, setSubmitStatus] = useState({ success: null, isFinal: false });
     const [brigadaId, setBrigadaId] = useState(null);
     const [completedSections, setCompletedSections] = useState({});
     const [formErrors, setFormErrors] = useState({});
@@ -411,7 +411,8 @@ const BombForm = () => {
             if (isLastSection) {
                 setSubmitStatus({
                     success: true,
-                    message: '¡Formulario completado con éxito! Tus necesidades han sido registradas.'
+                    message: '¡Formulario completado con éxito! Tus necesidades han sido registradas.',
+                    isFinal: true
                 });
             } else {
                 setSubmitStatus({
@@ -674,21 +675,6 @@ const BombForm = () => {
                     >
                         Anterior
                     </button>
-
-                    {isLastSection && (
-                        <button
-                            type="button"
-                            onClick={generatePDF}
-                            disabled={isGeneratingPDF}
-                            className={`px-6 py-2 rounded-lg font-medium ${
-                                isGeneratingPDF
-                                    ? 'bg-blue-300 text-white cursor-not-allowed'
-                                    : 'bg-blue-500 text-white hover:bg-blue-600'
-                            }`}
-                        >
-                            {isGeneratingPDF ? 'Generando PDF...' : 'Descargar PDF'}
-                        </button>
-                    )}
                 </div>
 
                 <div className="flex items-center justify-end gap-4">
@@ -717,7 +703,6 @@ const BombForm = () => {
             </div>
         );
     };
-
     return (
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-xl overflow-hidden max-w-7xl mx-auto my-8" ref={formRef}>
             {/* Header */}
@@ -761,7 +746,7 @@ const BombForm = () => {
 
             {/* Form Sections */}
             <div className="p-6">
-                {submitStatus.success && activeSection === SECTIONS[SECTIONS.length - 1].id && (
+                {submitStatus.success && submitStatus.isFinal && (
                     <div className="mb-6 rounded-lg border border-green-600 bg-green-50 px-6 py-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
@@ -795,6 +780,7 @@ const BombForm = () => {
                         </div>
                     </div>
                 )}
+
 
                 {/* Información de la Brigada */}
                 {activeSection === 'info' && (
