@@ -1,5 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import {
+    createBrigada,
+    updateBrigada,
+    upsertEppRopa,
+    upsertBotas,
+    upsertGuantes,
+    addEppEquipoItem,
+    addHerramientaItem,
+    addLogisticaRepuesto,
+    addAlimentacionItem,
+    addLogisticaCampoItem,
+    addLimpiezaPersonalItem,
+    addLimpiezaGeneralItem,
+    addMedicamentoItem,
+    addRescateAnimalItem
+} from './services/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -378,6 +393,169 @@ const BombForm = () => {
         return false;
     };
 
+    // ====================
+    // Ayudantes de persistencia a la API
+    // ====================
+    // Construye el payload de Información de Brigada que espera la API
+    const buildInfoPayload = () => ({
+        nombre: formData.nombre,
+        cantidadactivos: Number(formData.cantidadactivos) || 0,
+        nombrecomandante: formData.nombrecomandante,
+        celularcomandante: formData.celularcomandante,
+        encargadologistica: formData.encargadologistica || '',
+        celularlogistica: formData.celularlogistica || '',
+        numerosemergencia: formData.numerosemergencia || ''
+    });
+
+    // Crea o actualiza la brigada en base a si ya tenemos brigadaId
+    const persistInfo = async () => {
+        const payload = buildInfoPayload();
+        if (!brigadaId) {
+            const { data } = await createBrigada(payload);
+            if (!data?.brigadaId) {
+                throw new Error('No se recibió brigadaId desde la API');
+            }
+            setBrigadaId(data.brigadaId);
+            return data.brigadaId;
+        }
+        await updateBrigada(brigadaId, payload);
+        return brigadaId;
+    };
+
+    // Persiste EPP Ropa: envía por prenda y talla con cantidad > 0
+    const persistEppRopa = async (id) => {
+        const sizeKeys = ['xs','s','m','l','xl'];
+        const tasks = [];
+        Object.entries(eppRopa).forEach(([itemNombre, itemData]) => {
+            sizeKeys.forEach((sizeKey) => {
+                const qty = Number(itemData[sizeKey]) || 0;
+                if (qty > 0) {
+                    tasks.push(
+                        upsertEppRopa(id, {
+                            tipo: itemNombre,
+                            talla: sizeKey,
+                            cantidad: qty,
+                            observaciones: itemData.observaciones || ''
+                        })
+                    );
+                }
+            });
+        });
+        // Ítems personalizados de ropa
+        (eppRopaCustom || []).forEach((row) => {
+            sizeKeys.forEach((sizeKey) => {
+                const qty = Number(row[sizeKey]) || 0;
+                if ((row.item || '').trim() && qty > 0) {
+                    tasks.push(
+                        upsertEppRopa(id, {
+                            tipo: row.item,
+                            talla: sizeKey,
+                            cantidad: qty,
+                            observaciones: row.observaciones || ''
+                        })
+                    );
+                }
+            });
+        });
+        if (tasks.length === 0) return;
+        await Promise.all(tasks);
+    };
+
+    // Persiste Botas: envía por cada talla con cantidad > 0
+    const persistBotas = async (id) => {
+        const sizeKeys = ['37','38','39','40','41','42','43'];
+        const tasks = [];
+        sizeKeys.forEach((sizeKey) => {
+            const qty = Number(botas[sizeKey]) || 0;
+            if (qty > 0) {
+                tasks.push(
+                    upsertBotas(id, {
+                        tipo: 'botas',
+                        talla: sizeKey,
+                        cantidad: qty,
+                        observaciones: botas.observaciones || '',
+                        otratalla: ''
+                    })
+                );
+            }
+        });
+        // Talla "otra": la API sólo guarda el texto en otratalla
+        if ((botas.otratalla || '').trim()) {
+            tasks.push(
+                upsertBotas(id, {
+                    tipo: 'botas',
+                    talla: 'otra',
+                    cantidad: Number(botas.otra) || 0,
+                    observaciones: botas.observaciones || '',
+                    otratalla: botas.otratalla
+                })
+            );
+        }
+        if (tasks.length === 0) return;
+        await Promise.all(tasks);
+    };
+
+    // Persiste Guantes: la API espera todos los tamaños en un único POST
+    const persistGuantes = async (id) => {
+        const payload = {
+            xs: Number(guantes.XS) || 0,
+            s: Number(guantes.S) || 0,
+            m: Number(guantes.M) || 0,
+            l: Number(guantes.L) || 0,
+            xl: Number(guantes.XL) || 0,
+            xxl: Number(guantes.XXL) || 0,
+            otratalla: guantes.otratalla || null
+        };
+        // Evita llamadas innecesarias sin datos
+        const hasAny = Object.values(payload).some((v) => (typeof v === 'number' ? v > 0 : !!v));
+        if (!hasAny) return;
+        await upsertGuantes(id, payload);
+    };
+
+    // Utilidad para iterar y enviar ítems simples { item, cantidad, observaciones }
+    const persistSimpleItems = async (id, itemsMap, customList, addItemFn) => {
+        const tasks = [];
+        Object.entries(itemsMap).forEach(([item, data]) => {
+            const qty = Number(data.cantidad) || 0;
+            const obs = data.observaciones || '';
+            if (qty > 0 || obs.trim()) {
+                tasks.push(addItemFn(id, { item, cantidad: qty, observaciones: obs }));
+            }
+        });
+        (customList || []).forEach((row) => {
+            const name = (row.item || '').trim();
+            const qty = Number(row.cantidad) || 0;
+            const obs = row.observaciones || '';
+            if (name && (qty > 0 || obs.trim())) {
+                tasks.push(addItemFn(id, { item: name, cantidad: qty, observaciones: obs }));
+            }
+        });
+        if (tasks.length === 0) return;
+        await Promise.all(tasks);
+    };
+
+    // Utilidad para iterar y enviar ítems con costo { item, costo, observaciones }
+    const persistCostItems = async (id, itemsMap, customList, addItemFn) => {
+        const tasks = [];
+        Object.entries(itemsMap).forEach(([item, data]) => {
+            const cost = Number(data.costo) || 0;
+            const obs = data.observaciones || '';
+            if (cost > 0 || obs.trim()) {
+                tasks.push(addItemFn(id, { item, costo: cost, observaciones: obs }));
+            }
+        });
+        (customList || []).forEach((row) => {
+            const name = (row.item || '').trim();
+            const cost = Number(row.costo) || 0;
+            const obs = row.observaciones || '';
+            if (name && (cost > 0 || obs.trim())) {
+                tasks.push(addItemFn(id, { item: name, costo: cost, observaciones: obs }));
+            }
+        });
+        if (tasks.length === 0) return;
+        await Promise.all(tasks);
+    };
+
     // Manejador de envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -388,98 +566,53 @@ const BombForm = () => {
 
         setIsSubmitting(true);
         try {
-            // Construir el objeto de datos completo
-            const fullData = {
-                // Información básica de la brigada
-                ...formData,
-
-                // Equipamiento EPP
-                eppRopa,
-                botas,
-                guantes,
-                eppEquipo: {
-                    ...eppEquipo,
-                    custom: eppEquipoCustom
-                },
-                eppRopaCustom,
-
-                // Herramientas
-                herramientas: {
-                    ...herramientas,
-                    custom: herramientasCustom
-                },
-
-                // Logística
-                logisticaRepuestos: {
-                    ...logisticaRepuestos,
-                    custom: logisticaRepuestosCustom
-                },
-
-                // Alimentación
-                alimentacion: {
-                    ...alimentacion,
-                    custom: alimentacionCustom
-                },
-
-                // Equipo de campo
-                logisticaCampo: {
-                    ...logisticaCampo,
-                    custom: logisticaCampoCustom
-                },
-
-                // Limpieza
-                limpiezaPersonal: {
-                    ...limpiezaPersonal,
-                    custom: limpiezaPersonalCustom
-                },
-                limpiezaGeneral: {
-                    ...limpiezaGeneral,
-                    custom: limpiezaGeneralCustom
-                },
-
-                // Medicamentos
-                medicamentos: {
-                    ...medicamentos,
-                    custom: medicamentosCustom
-                },
-
-                // Rescate animal
-                rescateAnimal: {
-                    ...rescateAnimal,
-                    custom: rescateAnimalCustom
-                }
-            };
-
             const currentIndex = SECTIONS.findIndex(s => s.id === activeSection);
             const isLastSection = currentIndex === SECTIONS.length - 1;
 
-            if (isLastSection) {
-                setSubmitStatus({
-                    success: true,
-                    message: '¡Formulario completado con éxito! Tus necesidades han sido registradas.',
-                    isFinal: true
-                });
-            } else {
-                setSubmitStatus({
-                    success: true,
-                    message: 'Sección guardada correctamente. Avanzando...'
-                });
+            // 1) Siempre asegura que exista la brigada (crea o actualiza info cuando procede)
+            let id = brigadaId;
+            if (activeSection === 'info') {
+                id = await persistInfo();
+            } else if (!id) {
+                // Si por alguna razón se intenta guardar otra sección sin ID, crea primero la brigada
+                id = await persistInfo();
+            }
 
-                // Navegar a la siguiente sección
+            // 2) Persistencia específica por sección
+            if (activeSection === 'epp') {
+                await persistEppRopa(id);
+                await persistBotas(id);
+                await persistGuantes(id);
+                // EPP Equipo (otros equipos)
+                await persistSimpleItems(id, eppEquipo, eppEquipoCustom, addEppEquipoItem);
+            } else if (activeSection === 'tools') {
+                await persistSimpleItems(id, herramientas, herramientasCustom, addHerramientaItem);
+            } else if (activeSection === 'logistics') {
+                await persistCostItems(id, logisticaRepuestos, logisticaRepuestosCustom, addLogisticaRepuesto);
+            } else if (activeSection === 'food') {
+                await persistSimpleItems(id, alimentacion, alimentacionCustom, addAlimentacionItem);
+            } else if (activeSection === 'camp') {
+                await persistSimpleItems(id, logisticaCampo, logisticaCampoCustom, addLogisticaCampoItem);
+            } else if (activeSection === 'hygiene') {
+                await persistSimpleItems(id, limpiezaPersonal, limpiezaPersonalCustom, addLimpiezaPersonalItem);
+                await persistSimpleItems(id, limpiezaGeneral, limpiezaGeneralCustom, addLimpiezaGeneralItem);
+            } else if (activeSection === 'meds') {
+                await persistSimpleItems(id, medicamentos, medicamentosCustom, addMedicamentoItem);
+            } else if (activeSection === 'animals') {
+                await persistSimpleItems(id, rescateAnimal, rescateAnimalCustom, addRescateAnimalItem);
+            }
+
+            if (isLastSection) {
+                setSubmitStatus({ success: true, message: '¡Formulario completado con éxito!', isFinal: true });
+            } else {
+                setSubmitStatus({ success: true, message: 'Sección guardada correctamente. Avanzando...' });
                 setActiveSection(SECTIONS[currentIndex + 1].id);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                // Limpiar mensaje después de 1.5 segundos
-                setTimeout(() => {
-                    setSubmitStatus({ success: null, message: '' });
-                }, 1500);
+                setTimeout(() => setSubmitStatus({ success: null, message: '' }), 1500);
             }
         } catch (error) {
             console.error('Error al enviar formulario:', error);
-            setSubmitStatus({
-                success: false,
-                message: 'Error al enviar el formulario: ' + (error.response?.data?.message || error.message)
-            });
+            setSubmitStatus({ success: false, message: 'Error: ' + (error.response?.data?.message || error.message) });
         } finally {
             setIsSubmitting(false);
         }
