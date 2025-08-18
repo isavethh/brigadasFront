@@ -4,7 +4,7 @@ import axios from 'axios';
 // Usa la variable de entorno REACT_APP_API_BASE_URL para configurar el host de la API.
 // Ejemplo: REACT_APP_API_BASE_URL=https://mi-dominio.com/api
 export const apiClient = axios.create({
-    baseURL: 'http://localhost:3002/api',
+    baseURL: 'https://fomulario-brigadasapi.onrender.com/api',
     headers: {
         'Content-Type': 'application/json'
     }
