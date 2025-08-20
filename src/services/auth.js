@@ -17,23 +17,6 @@ export const login = async (credentials) => {
     return response.json();
 };
 
-export const register = async (userData) => {
-    const response = await fetch(`${API_BASE}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error en registro');
-    }
-
-    return response.json();
-};
-
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

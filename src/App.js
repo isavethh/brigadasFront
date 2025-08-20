@@ -34,10 +34,12 @@ function App() {
         );
     }
 
+    // Si no hay usuario logueado, mostrar directamente el formulario de brigada
     if (!user) {
-        return <Login onLogin={handleLogin} />;
+        return <BombForm />;
     }
 
+    // Si el usuario es encargado, mostrar panel de administración
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <header className="bg-white dark:bg-gray-800 shadow">
@@ -64,7 +66,6 @@ function App() {
                         <AdminDashboard />
                     </>
                 )}
-                {user.role === 'brigada' && <BombForm />}
             </main>
         </div>
     );

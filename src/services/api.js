@@ -1,117 +1,225 @@
-import axios from 'axios';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
-// Cliente Axios centralizado
-// Usa la variable de entorno REACT_APP_API_BASE_URL para configurar el host de la API.
-// Ejemplo: REACT_APP_API_BASE_URL=https://mi-dominio.com/api
-export const apiClient = axios.create({
-    baseURL: 'https://fomulario-brigadasapi.onrender.com/api',
-    headers: {
-        'Content-Type': 'application/json'
+// Request sin autenticación (para brigadas)
+const publicRequest = async (endpoint, options = {}) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+        ...options,
+        headers,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `HTTP error! status: ${response.status}`);
     }
+
+    return response.json();
+};
+
+// Request con autenticación (para admin)
+const authRequest = async (endpoint, options = {}) => {
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+        ...options,
+        headers,
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+};
+
+// Servicios públicos (accesibles sin login)
+export const getInventory = () => {
+    return publicRequest('/api/inventario');
+};
+
+// Servicios de Brigadas (públicos)
+export const createBrigada = (data) => {
+    return publicRequest('/api/brigadas', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const updateBrigada = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+    });
+};
+
+export const upsertEppRopa = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/epp-ropa`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const upsertBotas = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/botas`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const upsertGuantes = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/guantes`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addEppEquipoItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/epp-equipo`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addHerramientaItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/herramientas`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addLogisticaRepuesto = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/logistica-repuestos`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addAlimentacionItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/alimentacion`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addLogisticaCampoItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/logistica-campo`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addLimpiezaPersonalItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/limpieza-personal`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const addLimpiezaGeneralItem = (id, data) => {
+  return publicRequest(`/api/brigadas/${id}/limpieza-general`, {
+    method: 'POST',
+        body: JSON.stringify(data),
 });
+};
 
-// Interceptor simple para logging de errores (opcional)
-apiClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        // Propaga el error tal cual, pero deja trazas claras en consola
-        // para facilitar debugging en desarrollo.
-        if (process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.error('API error:', error?.response || error);
-        }
-        return Promise.reject(error);
+export const addMedicamentoItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/medicamentos`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const addRescateAnimalItem = (id, data) => {
+    return publicRequest(`/api/brigadas/${id}/rescate-animal`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+// Servicios protegidos (solo para admin)
+export const getInventoryCategories = () => {
+    return authRequest('/api/admin/inventario/categorias');
+};
+
+export const createInventoryItem = (data) => {
+    return authRequest('/api/admin/inventario', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const updateInventoryItem = (id, data) => {
+    return authRequest(`/api/admin/inventario/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+    });
+};
+
+export const deleteInventoryItem = (id) => {
+    return authRequest(`/api/admin/inventario/${id}`, {
+        method: 'DELETE',
+    });
+};
+
+export const getBrigadas = () => {
+    return authRequest('/api/admin/brigadas');
+};
+
+export const getBrigadaPDF = (id) => {
+    return authRequest(`/api/admin/brigadas/${id}/pdf`, {
+        responseType: 'blob'
+    });
+};
+
+// Servicios de autenticación
+export const login = async (credentials) => {
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Error en login');
     }
-);
 
-// ====================
-// BRIGADA
-// ====================
-export const createBrigada = (payload) => apiClient.post('/brigada', payload);
-export const getBrigada = (brigadaId) => apiClient.get(`/brigada/${brigadaId}`);
-export const updateBrigada = (brigadaId, payload) => apiClient.put(`/brigada/${brigadaId}`, payload);
-export const listBrigadas = () => apiClient.get('/brigada');
+    return response.json();
+};
 
-// ====================
-// EPP ROPA
-// ====================
-export const upsertEppRopa = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/epp-ropa`, payload);
-export const getEppRopa = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/epp-ropa`);
-export const deleteEppRopaItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/epp-ropa/${itemId}`);
+// Utilidades de autenticación
+export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+};
 
-// ====================
-// BOTAS
-// ====================
-export const upsertBotas = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/botas`, payload);
-export const getBotas = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/botas`);
+export const getCurrentUser = () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+};
 
-// ====================
-// GUANTES
-// ====================
-export const upsertGuantes = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/guantes`, payload);
-export const getGuantes = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/guantes`);
+export const getToken = () => {
+    return localStorage.getItem('token');
+};
 
-// ====================
-// EPP EQUIPO
-// ====================
-export const addEppEquipoItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/epp-equipo`, payload);
-export const getEppEquipo = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/epp-equipo`);
-export const deleteEppEquipoItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/epp-equipo/${itemId}`);
-
-// ====================
-// HERRAMIENTAS
-// ====================
-export const addHerramientaItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/herramientas`, payload);
-export const getHerramientas = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/herramientas`);
-export const deleteHerramientaItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/herramientas/${itemId}`);
-
-// ====================
-// LOGÍSTICA REPUESTOS
-// ====================
-export const addLogisticaRepuesto = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/logistica-repuestos`, payload);
-export const getLogisticaRepuestos = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/logistica-repuestos`);
-export const deleteLogisticaRepuesto = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/logistica-repuestos/${itemId}`);
-
-// ====================
-// ALIMENTACIÓN
-// ====================
-export const addAlimentacionItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/alimentacion`, payload);
-export const getAlimentacion = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/alimentacion`);
-export const deleteAlimentacionItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/alimentacion/${itemId}`);
-
-// ====================
-// LOGÍSTICA CAMPO
-// ====================
-export const addLogisticaCampoItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/logistica-campo`, payload);
-export const getLogisticaCampo = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/logistica-campo`);
-export const deleteLogisticaCampoItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/logistica-campo/${itemId}`);
-
-// ====================
-// LIMPIEZA PERSONAL
-// ====================
-export const addLimpiezaPersonalItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/limpieza-personal`, payload);
-export const getLimpiezaPersonal = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/limpieza-personal`);
-export const deleteLimpiezaPersonalItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/limpieza-personal/${itemId}`);
-
-// ====================
-// LIMPIEZA GENERAL
-// ====================
-export const addLimpiezaGeneralItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/limpieza-general`, payload);
-export const getLimpiezaGeneral = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/limpieza-general`);
-export const deleteLimpiezaGeneralItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/limpieza-general/${itemId}`);
-
-// ====================
-// MEDICAMENTOS
-// ====================
-export const addMedicamentoItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/medicamentos`, payload);
-export const getMedicamentos = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/medicamentos`);
-export const deleteMedicamentoItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/medicamentos/${itemId}`);
-
-// ====================
-// RESCATE ANIMAL
-// ====================
-export const addRescateAnimalItem = (brigadaId, payload) => apiClient.post(`/brigada/${brigadaId}/rescate-animal`, payload);
-export const getRescateAnimal = (brigadaId) => apiClient.get(`/brigada/${brigadaId}/rescate-animal`);
-export const deleteRescateAnimalItem = (brigadaId, itemId) => apiClient.delete(`/brigada/${brigadaId}/rescate-animal/${itemId}`);
-
-
+// Función para verificar si el usuario está autenticado como admin
+export const isAdminAuthenticated = () => {
+    const token = getToken();
+    const user = getCurrentUser();
+    return !!(token && user && user.role === 'encargado');
+};
