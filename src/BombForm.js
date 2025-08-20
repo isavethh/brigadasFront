@@ -1639,18 +1639,13 @@ const BombForm = () => {
                                     <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
                                         <label className="text-sm font-medium">{item}</label>
                                         <div className="flex items-center space-x-2">
-                                            <div className="flex items-center">
+                                            <div className="flex items-center space-x-1">
                                                 <span className="mr-1">S/.</span>
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    step="0.01"
-                                                    className={`w-24 px-2 py-1 border rounded text-center ${
-                                                        darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                                    }`}
-                                                    placeholder="Monto"
+                                                <NumberInput
                                                     value={logisticaRepuestos[item].costo}
-                                                    onChange={(e) => handleListCostChange(setLogisticaRepuestos)(item, e.target.value)}
+                                                    onChange={(value) => handleListCostChange(setLogisticaRepuestos)(item, value)}
+                                                    min="0"
+                                                    darkMode={darkMode}
                                                 />
                                             </div>
                                             <input
