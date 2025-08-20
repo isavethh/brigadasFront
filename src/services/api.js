@@ -1,4 +1,4 @@
-const API_BASE = process.env.REACT_APP_API_URL || 'https://fomulario-brigadasapi.onrender.com';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
 // Request sin autenticación (para brigadas)
 const publicRequest = async (endpoint, options = {}) => {
@@ -38,10 +38,19 @@ const authRequest = async (endpoint, options = {}) => {
     });
 
     if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || `HTTP error! status: ${response.status}`);
+        // Si viene PDF u otro binario pero con error, intenta parsear JSON
+        let errorText = `HTTP error! status: ${response.status}`;
+        try {
+            const error = await response.json();
+            errorText = error.message || errorText;
+        } catch (_) {}
+        throw new Error(errorText);
     }
 
+    // Respuesta blob si se solicita
+    if (options && options.responseType === 'blob') {
+        return response.blob();
+    }
     return response.json();
 };
 
@@ -123,16 +132,16 @@ export const addLogisticaCampoItem = (id, data) => {
 
 export const addLimpiezaPersonalItem = (id, data) => {
     return publicRequest(`/api/brigadas/${id}/limpieza-personal`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
 };
 
 export const addLimpiezaGeneralItem = (id, data) => {
-  return publicRequest(`/api/brigadas/${id}/limpieza-general`, {
-    method: 'POST',
+    return publicRequest(`/api/brigadas/${id}/limpieza-general`, {
+        method: 'POST',
         body: JSON.stringify(data),
-});
+    });
 };
 
 export const addMedicamentoItem = (id, data) => {
@@ -179,9 +188,7 @@ export const getBrigadas = () => {
 };
 
 export const getBrigadaPDF = (id) => {
-    return authRequest(`/api/admin/brigadas/${id}/pdf`, {
-        responseType: 'blob'
-    });
+    return authRequest(`/api/admin/brigadas/${id}/pdf`, { responseType: 'blob' });
 };
 
 // Servicios de autenticación
