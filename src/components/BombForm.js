@@ -411,12 +411,13 @@ const BombForm = () => {
     const persistInfo = async () => {
         const payload = buildInfoPayload();
         if (!brigadaId) {
-            const { data } = await createBrigada(payload);
-            if (!data?.brigadaId) {
+            const resp = await createBrigada(payload);
+            const newId = resp?.brigadaId ?? resp?.id ?? resp?.insertId;
+            if (!newId) {
                 throw new Error('No se recibió brigadaId desde la API');
             }
-            setBrigadaId(data.brigadaId);
-            return data.brigadaId;
+            setBrigadaId(newId);
+            return newId;
         }
         await updateBrigada(brigadaId, payload);
         return brigadaId;
