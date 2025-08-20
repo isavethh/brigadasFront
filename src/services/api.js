@@ -1,4 +1,4 @@
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://fomulario-brigadasapi.onrender.com';
 
 // Request sin autenticación (para brigadas)
 const publicRequest = async (endpoint, options = {}) => {

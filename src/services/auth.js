@@ -1,4 +1,4 @@
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://fomulario-brigadasapi.onrender.com';
 
 export const login = async (credentials) => {
     const response = await fetch(`${API_BASE}/api/auth/login`, {
