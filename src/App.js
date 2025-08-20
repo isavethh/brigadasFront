@@ -8,6 +8,7 @@ import { getCurrentUser, logout } from './services/auth';
 function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [view, setView] = useState('landing'); // 'landing' | 'login' | 'brigada'
 
     useEffect(() => {
         const currentUser = getCurrentUser();
@@ -34,9 +35,36 @@ function App() {
         );
     }
 
-    // Si no hay usuario logueado, mostrar directamente el formulario de brigada
+    // Si no hay usuario logueado, mostrar pantalla de elección (Encargado vs Brigada)
     if (!user) {
-        return <BombForm />;
+        if (view === 'login') return <Login onLogin={handleLogin} />;
+        if (view === 'brigada') return <BombForm />; // ocupa min-h-screen completo
+
+        // Pantalla inicial (landing)
+        return (
+            <div className="min-h-screen bg-black text-white flex items-center justify-center">
+                <div className="w-full max-w-2xl border border-white p-8">
+                    <h1 className="text-2xl font-semibold mb-6">Sistema de Brigadas</h1>
+                    <p className="text-gray-400 mb-8">Elige cómo quieres continuar</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button
+                            onClick={() => setView('login')}
+                            className="w-full border border-white px-4 py-3 uppercase tracking-wide hover:bg-white hover:text-black transition-colors"
+                            aria-label="Acceder como encargado"
+                        >
+                            Acceder como Encargado
+                        </button>
+                        <button
+                            onClick={() => setView('brigada')}
+                            className="w-full border border-white px-4 py-3 uppercase tracking-wide hover:bg-white hover:text-black transition-colors"
+                            aria-label="Continuar como brigada"
+                        >
+                            Continuar como Brigada
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     // Si el usuario es encargado, mostrar panel de administración
