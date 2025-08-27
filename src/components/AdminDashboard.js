@@ -36,54 +36,45 @@ const AdminDashboard = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-8">Cargando brigadas...</div>;
+    const formatDate = (dateString) => {
+        if (!dateString) return 'No disponible';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Fecha inválida';
+        return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+    };
+
+    if (loading) return <div className="text-center py-8 text-white">Cargando brigadas...</div>;
 
     return (
-        <div className="container mx-auto p-6 mt-8">
-            <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Panel de Encargado</h1>
-
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                    <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Brigada
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Comandante
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Fecha de Registro
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Acciones
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {brigadas.map(brigada => (
-                        <tr key={brigada.id}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">{brigada.nombre}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-white">{brigada.nombrecomandante}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
-                                    {new Date(brigada.fecha_creacion).toLocaleDateString()}
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button
-                                    onClick={() => handleDownloadPDF(brigada.id, brigada.nombre)}
-                                    className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
-                                >
-                                    Descargar PDF
-                                </button>
-                            </td>
+        <div className="bg-gray-900 text-white p-4 md:p-8 rounded-2xl shadow-2xl border border-gray-700 mt-10">
+            <h2 className="text-3xl font-bold mb-6 text-cyan-400">Registros de Brigadas</h2>
+            
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-700">
+                    <thead className="bg-gray-800">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Brigada</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Comandante</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha de Registro</th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Acciones</th>
                         </tr>
-                    ))}
+                    </thead>
+                    <tbody className="bg-gray-800/50 divide-y divide-gray-700">
+                        {brigadas.map(brigada => (
+                            <tr key={brigada.id} className="hover:bg-gray-700/50 transition-colors">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{brigada.nombre}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{brigada.nombrecomandante}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{formatDate(brigada.fecha_creacion)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button
+                                        onClick={() => handleDownloadPDF(brigada.id, brigada.nombre)}
+                                        className="bg-cyan-500 text-gray-900 font-bold py-2 px-4 rounded-lg hover:bg-cyan-600 transition-all duration-300 transform hover:-translate-y-0.5"
+                                    >
+                                        Descargar PDF
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
