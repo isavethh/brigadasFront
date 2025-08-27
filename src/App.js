@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import BombForm from './components/BombForm';
-import InventoryManager from './components/InventoryManager';
+
 import AdminDashboard from './components/AdminDashboard';
 import { getCurrentUser, logout } from './services/auth';
 
