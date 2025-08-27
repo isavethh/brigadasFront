@@ -56,7 +56,7 @@ const authRequest = async (endpoint, options = {}) => {
 
 // Servicios públicos (accesibles sin login)
 export const getInventory = () => {
-    return publicRequest('/api/inventario');
+    return authRequest('/api/inventario');
 };
 
 // Servicios de Brigadas (públicos)
