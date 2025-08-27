@@ -38,7 +38,7 @@ function App() {
     // Si no hay usuario logueado, mostrar pantalla de elección (Encargado vs Brigada)
     if (!user) {
         if (view === 'login') return <Login onLogin={handleLogin} onBack={() => setView('landing')} />;
-        if (view === 'brigada') return <BombForm />; // ocupa min-h-screen completo
+        if (view === 'brigada') return <BombForm onBack={() => setView('landing')} />;
 
         // Pantalla inicial (landing)
         return (
