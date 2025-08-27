@@ -9,7 +9,7 @@ function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [view, setView] = useState('landing'); // 'landing' | 'login' | 'brigada'
-
+//hola
     useEffect(() => {
         const currentUser = getCurrentUser();
         if (currentUser) {
@@ -42,25 +42,39 @@ function App() {
 
         // Pantalla inicial (landing)
         return (
-            <div className="min-h-screen bg-black text-white flex items-center justify-center">
-                <div className="w-full max-w-2xl border border-white p-8">
-                    <h1 className="text-2xl font-semibold mb-6">Sistema de Brigadas</h1>
-                    <p className="text-gray-400 mb-8">Elige cómo quieres continuar</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <button
-                            onClick={() => setView('login')}
-                            className="w-full border border-white px-4 py-3 uppercase tracking-wide hover:bg-white hover:text-black transition-colors"
-                            aria-label="Acceder como encargado"
-                        >
-                            Acceder como Encargado
-                        </button>
-                        <button
-                            onClick={() => setView('brigada')}
-                            className="w-full border border-white px-4 py-3 uppercase tracking-wide hover:bg-white hover:text-black transition-colors"
-                            aria-label="Continuar como brigada"
-                        >
-                            Continuar como Brigada
-                        </button>
+            <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
+                <div className="text-center mb-12">
+                    <h1 className="text-5xl font-bold mb-2">Bienvenido al Sistema de Brigadas</h1>
+                    <p className="text-xl text-gray-400">Por favor, selecciona tu rol para continuar.</p>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-8">
+                    {/* Opción Encargado */}
+                    <div
+                        onClick={() => setView('login')}
+                        className="group bg-gray-800 rounded-lg p-8 border border-gray-700 hover:border-cyan-400 transition-all duration-300 cursor-pointer transform hover:-translate-y-2"
+                        style={{ minWidth: '300px' }}
+                    >
+                        <h2 className="text-3xl font-bold text-cyan-400 mb-4">Encargado</h2>
+                        <p className="text-gray-400 mb-6">Accede para gestionar inventario y visualizar el estado de las brigadas.</p>
+                        <div className="flex items-center justify-end text-cyan-400">
+                            <span className="text-lg mr-2 group-hover:mr-4 transition-all">Acceder</span>
+                            <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
+                        </div>
+                    </div>
+
+                    {/* Opción Brigada */}
+                    <div
+                        onClick={() => setView('brigada')}
+                        className="group bg-gray-800 rounded-lg p-8 border border-gray-700 hover:border-fuchsia-400 transition-all duration-300 cursor-pointer transform hover:-translate-y-2"
+                        style={{ minWidth: '300px' }}
+                    >
+                        <h2 className="text-3xl font-bold text-fuchsia-400 mb-4">Brigada</h2>
+                        <p className="text-gray-400 mb-6">Continúa para registrar el uso de bombas y equipamiento en campo.</p>
+                        <div className="flex items-center justify-end text-fuchsia-400">
+                            <span className="text-lg mr-2 group-hover:mr-4 transition-all">Continuar</span>
+                            <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
+                        </div>
                     </div>
                 </div>
             </div>
