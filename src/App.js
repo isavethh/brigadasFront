@@ -56,7 +56,7 @@ function App() {
                         style={{ minWidth: '300px' }}
                     >
                         <h2 className="text-3xl font-bold text-cyan-400 mb-4">Encargado</h2>
-                        <p className="text-gray-400 mb-6">Accede para gestionar inventario y visualizar el estado de las brigadas.</p>
+                        <p className="text-gray-400 mb-6">Accede para visualizar el estado de las brigadas.</p>
                         <div className="flex items-center justify-end text-cyan-400">
                             <span className="text-lg mr-2 group-hover:mr-4 transition-all">Acceder</span>
                             <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
@@ -70,7 +70,7 @@ function App() {
                         style={{ minWidth: '300px' }}
                     >
                         <h2 className="text-3xl font-bold text-fuchsia-400 mb-4">Brigada</h2>
-                        <p className="text-gray-400 mb-6">Continúa para registrar el uso de bombas y equipamiento en campo.</p>
+                        <p className="text-gray-400 mb-6">Continúa para registrar a tu brigada y todo lo que necesiten.</p>
                         <div className="flex items-center justify-end text-fuchsia-400">
                             <span className="text-lg mr-2 group-hover:mr-4 transition-all">Continuar</span>
                             <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
