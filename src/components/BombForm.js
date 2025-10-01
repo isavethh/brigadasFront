@@ -1146,7 +1146,8 @@ const BombForm = ({ onBack }) => {
                     <button
                         onClick={generatePDF}
                         disabled={isGeneratingPDF}
-                        className="group relative bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-400 hover:via-yellow-400 hover:to-orange-400 text-white font-bold px-12 py-6 rounded-2xl transition-all duration-700 transform hover:scale-110 hover:shadow-2xl hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-xl border-2 border-amber-300 hover:border-amber-200"
+                        className="group relative bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-400 hover:via-yellow-400 hover:to-orange-400 text-white font-bold px-6 sm:px-12 py-4 sm:py-6 rounded-xl sm:rounded-2xl transition-all duration-700 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg sm:text-xl border-2 border-amber-300 hover:border-amber-200"
+
                         style={{
                             background: isGeneratingPDF ? '#9ca3af' : 'linear-gradient(135deg, #f59e0b, #fbbf24, #f97316)',
                             boxShadow: '0 0 40px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
@@ -1420,7 +1421,8 @@ const BombForm = ({ onBack }) => {
                     </div>
 
                     {/* Contenido principal del formulario */}
-                    <div className="p-8">
+                    <div className="p-4 sm:p-8"
+>
                         {/* Mostrar resumen si está finalizado */}
                         {submitStatus.isFinal && showSummary ? (
                             <>
@@ -1843,9 +1845,11 @@ const BombForm = ({ onBack }) => {
                                                 darkMode ? 'border-purple-400' : 'border-purple-600'
                                             }`}>EPP - Equipo</h2>
                                             
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
                                                 {EPP_EQUIPO_ITEMS.map(item => (
-                                                    <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                                                    <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                                                         <label className="text-sm font-medium">{item}</label>
                                                         <div className="flex items-center space-x-2">
                                                             <NumberInput
@@ -1856,7 +1860,7 @@ const BombForm = ({ onBack }) => {
                                                             />
                                                             <input
                                                                 type="text"
-                                                                className={`w-40 px-2 py-1 border rounded ${
+                                                                className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                                                     darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                                                                 }`}
                                                                 placeholder="Observaciones"
@@ -1946,9 +1950,11 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {HERRAMIENTAS_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <NumberInput
@@ -1959,7 +1965,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                           className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2049,9 +2055,10 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {LOGISTICA_REPUESTOS_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <div className="flex items-center space-x-1">
@@ -2065,7 +2072,7 @@ const BombForm = ({ onBack }) => {
                         </div>
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2163,9 +2170,11 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {ALIMENTACION_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <NumberInput
@@ -2176,7 +2185,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2266,9 +2275,10 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {CAMPO_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <NumberInput
@@ -2279,7 +2289,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2374,7 +2384,8 @@ const BombForm = ({ onBack }) => {
             <h3 className={`text-xl font-semibold border-l-4 pl-3 py-1 ${
                 darkMode ? 'border-teal-400' : 'border-teal-600'
             }`}>Limpieza Personal</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
                 {LIMPIEZA_PERSONAL_ITEMS.map(item => (
                     <div key={item} className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-300 hover:shadow-lg ${
                         item === 'Toallas Femeninas' 
@@ -2478,9 +2489,11 @@ const BombForm = ({ onBack }) => {
             <h3 className={`text-xl font-semibold border-l-4 pl-3 py-1 ${
                 darkMode ? 'border-teal-400' : 'border-teal-600'
             }`}>Limpieza General</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
                 {LIMPIEZA_GENERAL_ITEMS.map(item => (
-                    <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                    <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                         <label className="text-sm font-medium">{item}</label>
                         <div className="flex items-center space-x-2">
                             <NumberInput
@@ -2491,7 +2504,7 @@ const BombForm = ({ onBack }) => {
                             />
                             <input
                                 type="text"
-                                className={`w-40 px-2 py-1 border rounded ${
+                               className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                     darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                                 }`}
                                 placeholder="Observaciones"
@@ -2582,9 +2595,11 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {MEDICAMENTOS_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <NumberInput
@@ -2595,7 +2610,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2685,9 +2700,11 @@ const BombForm = ({ onBack }) => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+>
             {RESCATE_ANIMAL_ITEMS.map(item => (
-                <div key={item} className={`flex items-center justify-between ${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
+>
                     <label className="text-sm font-medium">{item}</label>
                     <div className="flex items-center space-x-2">
                         <NumberInput
@@ -2698,7 +2715,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                            className={`w-40 px-2 py-1 border rounded ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
