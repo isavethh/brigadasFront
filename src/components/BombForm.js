@@ -89,6 +89,12 @@ const SECTIONS = [
         endpoint: '/rescate-animal',
         fields: ['item', 'cantidad', 'observaciones']
     }
+    ,{
+        id: 'summary',
+        name: 'Resumen',
+        endpoint: '',
+        fields: []
+    }
 ];
 
 // Componente de input numérico con botones +/-
@@ -160,7 +166,6 @@ const BombForm = ({ onBack }) => {
     const [completedSections, setCompletedSections] = useState({});
     const [formErrors, setFormErrors] = useState({});
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-    const [showSummary, setShowSummary] = useState(false);
     const formRef = useRef();
 
     // Obtener colores de la sección actual
@@ -607,7 +612,7 @@ const BombForm = ({ onBack }) => {
 
             if (isLastSection) {
                 setSubmitStatus({ success: true, message: 'Formulario completado. Revisa el resumen antes de descargar.' });
-                setShowSummary(true);
+                setActiveSection('summary');
             } else {
                 setSubmitStatus({ success: true, message: 'Sección guardada correctamente. Avanzando...' });
                 setActiveSection(SECTIONS[currentIndex + 1].id);
@@ -937,7 +942,7 @@ const BombForm = ({ onBack }) => {
                             })}
                         </div>
                         <div className="mt-2 text-right">
-                            <button onClick={() => { setShowSummary(false); setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar EPP</button>
+                            <button onClick={() => { setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar EPP</button>
                         </div>
                     </div>
 
@@ -949,7 +954,7 @@ const BombForm = ({ onBack }) => {
                             {botas.observaciones && <div>Obs: {botas.observaciones}</div>}
                         </div>
                         <div className="mt-2 text-right">
-                            <button onClick={() => { setShowSummary(false); setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Botas</button>
+                            <button onClick={() => { setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Botas</button>
                         </div>
                     </div>
 
@@ -960,13 +965,13 @@ const BombForm = ({ onBack }) => {
                             {herramientasCustom.map((c,i) => <div key={`hc-${i}`}>{c.item}: {c.cantidad}</div>)}
                         </div>
                         <div className="mt-2 text-right">
-                            <button onClick={() => { setShowSummary(false); setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
+                            <button onClick={() => { setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
                         </div>
                     </div>
 
                     <div className="flex justify-end gap-3 mt-4">
-                        <button onClick={() => setShowSummary(false)} className="px-4 py-2 rounded border">Volver</button>
-                        <button onClick={async () => { setShowSummary(false); await generatePDF(); }} className="px-4 py-2 bg-blue-600 text-white rounded">Generar PDF</button>
+                        <button onClick={() => setActiveSection(SECTIONS[SECTIONS.length-2].id)} className="px-4 py-2 rounded border">Volver</button>
+                        <button onClick={async () => { await generatePDF(); }} className="px-4 py-2 bg-blue-600 text-white rounded">Generar PDF</button>
                     </div>
                 </div>
             </div>
@@ -982,13 +987,8 @@ const BombForm = ({ onBack }) => {
         ? 'bg-gray-700 border-gray-600 focus:ring-2 focus:ring-purple-500'
         : 'bg-white border-gray-300 focus:ring-2 focus:ring-blue-500'} focus:outline-none transition-colors`;
 
-    if (showSummary) {
-        return (
-            <div className={`min-h-screen ${bgColor} ${textColor} transition-colors duration-200 p-6`}>
-                {renderSummary()}
-            </div>
-        );
-    }
+    // Si la sección activa es 'summary', renderizamos el resumen como una sección más
+    const isSummarySection = activeSection === 'summary';
 
     return (
         <div className={`min-h-screen ${bgColor} ${textColor} transition-colors duration-200`}>
@@ -1096,6 +1096,11 @@ const BombForm = ({ onBack }) => {
 
                 {/* Contenido principal del formulario */}
                 <div className="p-6">
+                    {isSummarySection && (
+                        <div className="mb-6">
+                            {renderSummary()}
+                        </div>
+                    )}
                     {submitStatus.isFinal && (
                         <div className={`mb-6 rounded-lg p-6 ${
                             submitStatus.success
