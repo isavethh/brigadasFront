@@ -414,18 +414,28 @@ const BombForm = ({ onBack }) => {
 
     // Crea o actualiza la brigada en base a si ya tenemos brigadaId
     const persistInfo = async () => {
-        const payload = buildInfoPayload();
-        if (!brigadaId) {
-            const { data } = await createBrigada(payload);
-            if (!data?.brigadaId) {
-                throw new Error('No se recibió brigadaId desde la API');
-            }
-            setBrigadaId(data.brigadaId);
-            return data.brigadaId;
+    const payload = buildInfoPayload();
+    if (!brigadaId) {
+        const response = await createBrigada(payload);
+        console.log('Respuesta de API:', response); // 🔍 Para ver qué devuelve
+        
+        // Intentar diferentes estructuras de respuesta
+        const newBrigadaId = response.data?.brigadaId || 
+                            response.data?.id || 
+                            response.brigadaId || 
+                            response.id;
+        
+        if (!newBrigadaId) {
+            console.error('Estructura completa:', response);
+            throw new Error(`No se pudo obtener ID. Respuesta: ${JSON.stringify(response)}`);
         }
-        await updateBrigada(brigadaId, payload);
-        return brigadaId;
-    };
+        setBrigadaId(newBrigadaId);
+        return newBrigadaId;
+    }
+    await updateBrigada(brigadaId, payload);
+    return brigadaId;
+};
+
 
     // Persiste EPP Ropa: envía por prenda y talla con cantidad > 0
     const persistEppRopa = async (id) => {
