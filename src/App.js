@@ -90,16 +90,17 @@ function App() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
             </div>
 
-            {/* Logo solo, sin fondo */}
+            {/* Logo styled */}
             <div className="relative w-full py-6 flex justify-center">
                 <div className="group relative">
-                        <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
-                        <img
-                            src={alas}
-                            alt="Logo de la empresa"
-                            className="max-w-full max-h-full object-contain"
-                        />
-                        <span className="text-slate-700 font-bold text-base tracking-wide">ALAS CHIQUITANAS</span>
+                    <div className="flex items-center gap-4 bg-white/95 rounded-xl px-4 py-2 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                        <div className="flex items-center justify-center w-14 h-14 bg-white rounded-full shadow-inner">
+                            <img src={alas} alt="Logo" className="w-10 h-10 object-contain" />
+                        </div>
+                        <div className="text-left">
+                            <div className="text-slate-800 font-extrabold text-lg leading-tight">ALAS</div>
+                            <div className="text-slate-600 font-semibold text-sm tracking-widest">CHIQUITANAS</div>
+                        </div>
                     </div>
                 </div>
             </div>
