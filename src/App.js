@@ -53,28 +53,29 @@ function App() {
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
                 </div>
 
-                {/* Espacio para el logo SIN fondo amarillo */}
-                <div className="relative w-full bg-slate-800/50 backdrop-blur-sm py-8 flex justify-center border-b border-yellow-400/30">
-                    <div className="group relative">
-                        <div className="w-40 h-24 bg-gradient-to-r from-white/95 to-slate-50/95 rounded-xl flex items-center justify-center border border-slate-300/50 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
-                            <img 
-                                src="/path/to/your/logo.png" 
-                                alt="Logo de la empresa" 
-                                className="max-w-full max-h-full object-contain"
-                            />
-                            {/* Placeholder mientras no tengas el logo */}
-                            <span className="text-slate-700 font-bold text-lg tracking-wide">LOGO</span>
-                        </div>
-                    </div>
-                </div>
+         {/* Logo solo, sin fondo */}
+<div className="relative w-full py-6 flex justify-center">
+    <div className="group relative">
+        <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+            <img 
+                src="/path/to/your/logo.png" 
+                alt="Logo de la empresa" 
+                className="max-w-full max-h-full object-contain"
+            />
+            <span className="text-slate-700 font-bold text-base tracking-wide">LOGO</span>
+        </div>
+    </div>
+</div>
+
 
                 <div className="relative flex-1 flex flex-col items-center justify-center p-8 animate-fade-in">
-                    <div className="text-center mb-16 animate-slide-up">
-                        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 bg-clip-text text-transparent animate-gradient-x">
-                            Bienvenido al Sistema de Brigadas
-                        </h1>
-                        <p className="text-2xl text-slate-300 animate-fade-in-delay">Por favor, selecciona tu rol para continuar.</p>
-                    </div>
+    <div className="text-center mb-16 animate-slide-up">
+        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 bg-clip-text text-transparent animate-gradient-x leading-tight pb-2">
+            Bienvenido al Sistema de Brigadas
+        </h1>
+        <p className="text-2xl text-slate-300 animate-fade-in-delay">Por favor, selecciona tu rol para continuar.</p>
+    </div>
+
 
                     <div className="flex flex-col lg:flex-row gap-10 animate-slide-up-delay">
                         {/* Opción Encargado */}
