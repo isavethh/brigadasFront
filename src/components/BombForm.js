@@ -916,34 +916,84 @@ const BombForm = ({ onBack }) => {
     };
 
     const renderSummary = () => {
-        // Usar la misma estética que las demás secciones del formulario
+        // Resumen visual enriquecido
+        const reqFields = SECTIONS.find(s => s.id === 'info')?.required || [];
+        const missing = reqFields.filter(f => !formData[f] || formData[f].toString().trim() === '');
+
+        const countNonZero = (mapObj) => Object.values(mapObj || {}).reduce((acc, v) => {
+            if (v && typeof v === 'object') {
+                // Estructuras con tallas
+                const subtotal = Object.values(v).reduce((a, b) => a + (Number(b) || 0), 0);
+                return acc + (subtotal > 0 ? 1 : 0);
+            }
+            return acc + ((Number(v) || 0) > 0 ? 1 : 0);
+        }, 0);
+
         return (
             <div className="space-y-6">
-                <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
-                    darkMode ? 'border-purple-400' : 'border-purple-600'
-                }`}>Resumen del Formulario</h2>
+                <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${darkMode ? 'border-purple-400' : 'border-purple-600'}`}>Resumen del Formulario</h2>
 
-                <div className={`grid grid-cols-1 gap-6`}> 
-                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
-                        <h3 className="font-semibold mb-2">Información</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                            <div><span className="font-medium">Nombre:</span> {formData.nombre || '-'}</div>
-                            <div><span className="font-medium">Bomberos activos:</span> {formData.cantidadactivos}</div>
-                            <div><span className="font-medium">Comandante:</span> {formData.nombrecomandante || '-'} </div>
-                            <div><span className="font-medium">Teléfono comando:</span> {formData.celularcomandante || '-'}</div>
+                {/* Top info bar */}
+                <div className={`p-4 rounded-md ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}> 
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center bg-indigo-600 text-white font-bold">🏷️</div>
+                            <div>
+                                <div className="text-lg font-semibold">{formData.nombre || '— Sin nombre —'}</div>
+                                <div className="text-sm text-gray-400">Comandante: {formData.nombrecomandante || '-' } | Activos: {formData.cantidadactivos}</div>
+                            </div>
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-3">
+                        {missing.length > 0 ? (
+                            <div className="px-3 py-1 rounded bg-red-600 text-white font-semibold">Campos obligatorios faltantes: {missing.join(', ')}</div>
+                        ) : (
+                            <div className="px-3 py-1 rounded bg-green-600 text-white font-semibold">Todo listo para enviar</div>
+                        )}
+                        <div className="text-sm text-gray-400">N° emergencia: {formData.numerosemergencia || '-'}</div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Información */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
-                        <h3 className="font-semibold mb-2">EPP - Ropa (resumen)</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div className="flex justify-between items-start">
+                            <h3 className="font-semibold text-lg">ℹ️ Información</h3>
+                            <div className="text-sm text-gray-500">{missing.length > 0 ? <span className="text-red-400">Faltan {missing.length}</span> : <span className="text-green-400">Completado</span>}</div>
+                        </div>
+                        <div className="mt-3 text-sm space-y-1">
+                            <div><span className="font-medium">Nombre:</span> {formData.nombre || '-'}</div>
+                            <div><span className="font-medium">Bomberos activos:</span> {formData.cantidadactivos}</div>
+                            <div><span className="font-medium">Comandante:</span> {formData.nombrecomandante || '-'}</div>
+                            <div><span className="font-medium">Celular comando:</span> {formData.celularcomandante || '-'}</div>
+                            <div><span className="font-medium">Encargado logística:</span> {formData.encargadologistica || '-'}</div>
+                            <div><span className="font-medium">Celular logística:</span> {formData.celularlogistica || '-'}</div>
+                        </div>
+                        <div className="mt-3 text-right">
+                            <button onClick={() => { setActiveSection('info'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Información</button>
+                        </div>
+                    </div>
+
+                    {/* EPP Ropa resumen */}
+                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-semibold text-lg">👕 EPP - Ropa</h3>
+                            <div className="text-sm text-gray-500">Items: {Object.keys(eppRopa || {}).length}</div>
+                        </div>
+                        <div className="mt-3 grid grid-cols-1 gap-2 text-sm">
                             {Object.entries(eppRopa).map(([item, data]) => {
                                 const total = ['xs','s','m','l','xl'].reduce((acc,k)=>acc + (Number(data[k])||0), 0);
-                                if (total === 0 && !(data.observaciones||'').trim()) return null;
+                                const hasObs = (data.observaciones||'').trim() !== '';
                                 return (
-                                    <div key={item} className="flex justify-between">
-                                        <div className="font-medium">{item}</div>
-                                        <div className="text-gray-500">{total}{data.observaciones ? ` — ${data.observaciones}` : ''}</div>
+                                    <div key={item} className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="font-medium">{item}</div>
+                                            {hasObs && <div className="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-800">¡Observación!</div>}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="text-sm text-gray-500">Total: <span className="font-semibold text-gray-800">{total}</span></div>
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -953,32 +1003,96 @@ const BombForm = ({ onBack }) => {
                         </div>
                     </div>
 
+                    {/* Botas */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
-                        <h3 className="font-semibold mb-2">Botas</h3>
-                        <div className="text-sm">
-                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (v>0 ? <div key={k}>{k}: {v}</div> : null))}
-                            {botas.otratalla && <div>Otra talla: {botas.otratalla}</div>}
-                            {botas.observaciones && <div>Obs: {botas.observaciones}</div>}
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-semibold text-lg">🥾 Botas</h3>
+                            <div className="text-sm text-gray-500">Tallas con cantidad: {Object.entries(botas || {}).filter(([k])=> !['observaciones','otratalla'].includes(k) && Number(botas[k])>0).length}</div>
+                        </div>
+                        <div className="mt-3 text-sm grid grid-cols-2 gap-2">
+                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (v>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v}</div></div> : null))}
+                            {botas.otratalla ? <div className="col-span-2 text-sm">Otra talla: {botas.otratalla}</div> : null}
+                            {botas.observaciones ? <div className="col-span-2 text-sm text-yellow-500">Obs: {botas.observaciones}</div> : null}
                         </div>
                         <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Botas</button>
                         </div>
                     </div>
 
+                    {/* Herramientas */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
-                        <h3 className="font-semibold mb-2">Herramientas / Equipo</h3>
-                        <div className="text-sm">
-                            {Object.entries(herramientas).map(([k,v]) => (v.cantidad>0 ? <div key={k}>{k}: {v.cantidad}</div> : null))}
-                            {herramientasCustom.map((c,i) => <div key={`hc-${i}`}>{c.item}: {c.cantidad}</div>)}
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-semibold text-lg">🛠️ Herramientas</h3>
+                            <div className="text-sm text-gray-500">Items con cantidad: {Object.values(herramientas || {}).filter(v => v.cantidad>0).length + herramientasCustom.length}</div>
+                        </div>
+                        <div className="mt-3 text-sm space-y-1">
+                            {Object.entries(herramientas).map(([k,v]) => v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null)}
+                            {herramientasCustom.map((c,i) => <div key={`hc-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
                         </div>
                         <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-2">
-                        <button onClick={() => setActiveSection(SECTIONS[SECTIONS.length-2].id)} className="px-4 py-2 rounded border">Volver</button>
-                        <button onClick={async () => { await generatePDF(); }} className="px-4 py-2 bg-blue-600 text-white rounded">Generar PDF</button>
+                    {/* Logística, Alimentación, Campo, Limpieza, Medicamentos, Rescate */}
+                    <div className={`p-4 rounded-lg col-span-1 lg:col-span-2 ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <h4 className="font-semibold">🚚 Logística</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(logisticaRepuestos || {}).map(([k,v]) => (v.costo>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.costo}</div></div> : null))}
+                                    {logisticaRepuestosCustom.map((c,i) => <div key={`lr-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.costo}</div></div>)}
+                                    {Object.values(logisticaRepuestos || {}).every(x=> (x.costo||0)===0) && logisticaRepuestosCustom.length===0 && <div className="text-sm text-gray-400">Sin repuestos registrados</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="font-semibold">🍱 Alimentación</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(alimentacion || {}).map(([k,v]) => (v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null))}
+                                    {alimentacionCustom.map((c,i) => <div key={`al-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                                    {Object.values(alimentacion || {}).every(x=> (x.cantidad||0)===0) && alimentacionCustom.length===0 && <div className="text-sm text-gray-400">Sin ítems</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="font-semibold">⛺ Campo</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(logisticaCampo || {}).map(([k,v]) => (v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null))}
+                                    {logisticaCampoCustom.map((c,i) => <div key={`lc-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                                    {Object.values(logisticaCampo || {}).every(x=> (x.cantidad||0)===0) && logisticaCampoCustom.length===0 && <div className="text-sm text-gray-400">Sin ítems</div>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div>
+                                <h4 className="font-semibold">🧹 Limpieza</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(limpiezaPersonal || {}).map(([k,v]) => (v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null))}
+                                    {limpiezaPersonalCustom.map((c,i) => <div key={`lp-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                                    {Object.values(limpiezaPersonal || {}).every(x=> (x.cantidad||0)===0) && limpiezaPersonalCustom.length===0 && <div className="text-sm text-gray-400">Sin ítems</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="font-semibold">💊 Medicamentos</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(medicamentos || {}).map(([k,v]) => (v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null))}
+                                    {medicamentosCustom.map((c,i) => <div key={`md-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                                    {Object.values(medicamentos || {}).every(x=> (x.cantidad||0)===0) && medicamentosCustom.length===0 && <div className="text-sm text-gray-400">Sin ítems</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="font-semibold">🐾 Rescate animal</h4>
+                                <div className="text-sm mt-2">
+                                    {Object.entries(rescateAnimal || {}).map(([k,v]) => (v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null))}
+                                    {rescateAnimalCustom.map((c,i) => <div key={`ra-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                                    {Object.values(rescateAnimal || {}).every(x=> (x.cantidad||0)===0) && rescateAnimalCustom.length===0 && <div className="text-sm text-gray-400">Sin ítems</div>}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
