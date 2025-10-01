@@ -28,8 +28,12 @@ function App() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-amber-50 dark:bg-amber-900">
-                <div className="text-xl text-amber-800 dark:text-amber-100">Cargando...</div>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800">
+                <div className="relative">
+                    <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 w-16 h-16 border-4 border-orange-400 border-b-transparent rounded-full animate-spin animate-reverse"></div>
+                    <div className="mt-4 text-xl text-yellow-300 animate-pulse text-center">Cargando...</div>
+                </div>
             </div>
         );
     }
@@ -41,53 +45,88 @@ function App() {
 
         // Pantalla inicial (landing)
         return (
-            <div className="min-h-screen bg-gradient-to-br from-amber-900 via-yellow-900 to-amber-800 text-white flex flex-col">
-                {/* Espacio para el logo */}
-                <div className="w-full bg-amber-800/50 py-6 flex justify-center">
-                    <div className="w-32 h-20 bg-white/10 rounded-lg flex items-center justify-center border border-amber-400/30">
-                        {/* Aquí va tu logo */}
-                        <img 
-                            src="/path/to/your/logo.png" 
-                            alt="Logo de la empresa" 
-                            className="max-w-full max-h-full object-contain"
-                        />
-                        {/* Placeholder mientras no tengas el logo */}
-                        <span className="text-amber-200 text-sm">LOGO</span>
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-white relative overflow-hidden">
+                {/* Elementos decorativos de fondo */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+                </div>
+
+                {/* Espacio para el logo con animación */}
+                <div className="relative w-full bg-gradient-to-r from-yellow-500/20 via-amber-500/20 to-orange-500/20 backdrop-blur-sm py-8 flex justify-center border-b border-yellow-400/30">
+                    <div className="group relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000 animate-pulse"></div>
+                        <div className="relative w-40 h-24 bg-gradient-to-r from-white/95 to-yellow-50/95 rounded-xl flex items-center justify-center border border-yellow-300/50 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                            <img 
+                                src="/path/to/your/logo.png" 
+                                alt="Logo de la empresa" 
+                                className="max-w-full max-h-full object-contain"
+                            />
+                            {/* Placeholder mientras no tengas el logo */}
+                            <span className="text-slate-700 font-bold text-lg tracking-wide">LOGO</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col items-center justify-center p-4">
-                    <div className="text-center mb-12">
-                        <h1 className="text-5xl font-bold mb-2 text-amber-100">Bienvenido al Sistema de Brigadas</h1>
-                        <p className="text-xl text-amber-200">Por favor, selecciona tu rol para continuar.</p>
+                <div className="relative flex-1 flex flex-col items-center justify-center p-8 animate-fade-in">
+                    <div className="text-center mb-16 animate-slide-up">
+                        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 bg-clip-text text-transparent animate-gradient-x">
+                            Bienvenido al Sistema de Brigadas
+                        </h1>
+                        <p className="text-2xl text-slate-300 animate-fade-in-delay">Por favor, selecciona tu rol para continuar.</p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-8">
+                    <div className="flex flex-col lg:flex-row gap-10 animate-slide-up-delay">
                         {/* Opción Encargado */}
                         <div
                             onClick={() => setView('login')}
-                            className="group bg-amber-800/40 backdrop-blur-sm rounded-lg p-8 border border-amber-600/50 hover:border-amber-400 hover:bg-amber-700/50 transition-all duration-300 cursor-pointer transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/20"
-                            style={{ minWidth: '300px' }}
+                            className="group relative bg-gradient-to-br from-slate-800/80 to-indigo-900/80 backdrop-blur-xl rounded-2xl p-10 border border-yellow-400/30 hover:border-yellow-400/70 transition-all duration-500 cursor-pointer transform hover:-translate-y-3 hover:scale-105 shadow-2xl hover:shadow-yellow-500/25"
+                            style={{ minWidth: '320px' }}
                         >
-                            <h2 className="text-3xl font-bold text-amber-300 mb-4">Administrador</h2>
-                            <p className="text-amber-100 mb-6">Accede para visualizar el estado de las brigadas.</p>
-                            <div className="flex items-center justify-end text-amber-300">
-                                <span className="text-lg mr-2 group-hover:mr-4 transition-all">Acceder</span>
-                                <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
+                            {/* Efecto de brillo en hover */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/5 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                            
+                            <div className="relative z-10">
+                                <div className="flex items-center mb-6">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-4 transform group-hover:rotate-6 transition-transform duration-300">
+                                        <span className="text-white text-xl font-bold">👨‍💼</span>
+                                    </div>
+                                    <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
+                                        Administrador
+                                    </h2>
+                                </div>
+                                <p className="text-slate-300 mb-8 leading-relaxed">Accede para visualizar el estado de las brigadas y gestionar el sistema completo.</p>
+                                <div className="flex items-center justify-end text-yellow-400 group-hover:text-yellow-300 transition-colors">
+                                    <span className="text-lg mr-3 group-hover:mr-6 transition-all duration-300 font-medium">Acceder</span>
+                                    <span className="text-2xl transform group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300">→</span>
+                                </div>
                             </div>
                         </div>
 
                         {/* Opción Brigada */}
                         <div
                             onClick={() => setView('brigada')}
-                            className="group bg-yellow-800/40 backdrop-blur-sm rounded-lg p-8 border border-yellow-600/50 hover:border-yellow-400 hover:bg-yellow-700/50 transition-all duration-300 cursor-pointer transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/20"
-                            style={{ minWidth: '300px' }}
+                            className="group relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl rounded-2xl p-10 border border-orange-400/30 hover:border-orange-400/70 transition-all duration-500 cursor-pointer transform hover:-translate-y-3 hover:scale-105 shadow-2xl hover:shadow-orange-500/25"
+                            style={{ minWidth: '320px' }}
                         >
-                            <h2 className="text-3xl font-bold text-yellow-300 mb-4">Equipo o Brigada</h2>
-                            <p className="text-amber-100 mb-6">Continúa para registrar a tu brigada y todo lo que necesiten.</p>
-                            <div className="flex items-center justify-end text-yellow-300">
-                                <span className="text-lg mr-2 group-hover:mr-4 transition-all">Continuar</span>
-                                <span className="text-2xl transform group-hover:translate-x-2 transition-transform">→</span>
+                            {/* Efecto de brillo en hover */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 via-orange-400/5 to-orange-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                            
+                            <div className="relative z-10">
+                                <div className="flex items-center mb-6">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-lg flex items-center justify-center mr-4 transform group-hover:rotate-6 transition-transform duration-300">
+                                        <span className="text-white text-xl font-bold">👥</span>
+                                    </div>
+                                    <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                                        Equipo o Brigada
+                                    </h2>
+                                </div>
+                                <p className="text-slate-300 mb-8 leading-relaxed">Continúa para registrar a tu brigada y todo lo que necesiten para sus operaciones.</p>
+                                <div className="flex items-center justify-end text-orange-400 group-hover:text-orange-300 transition-colors">
+                                    <span className="text-lg mr-3 group-hover:mr-6 transition-all duration-300 font-medium">Continuar</span>
+                                    <span className="text-2xl transform group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300">→</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,41 +137,51 @@ function App() {
 
     // Si el usuario es encargado, mostrar panel de administración
     return (
-        <div className="min-h-screen bg-amber-50 dark:bg-amber-900">
-            {/* Header con logo */}
-            <header className="bg-gradient-to-r from-amber-600 to-yellow-600 shadow-lg">
-                <div className="max-w-7xl mx-auto px-4 py-4">
-                    {/* Contenedor del logo */}
-                    <div className="flex justify-center mb-4">
-                        <div className="w-24 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-                            <img 
-                                src="/path/to/your/logo.png" 
-                                alt="Logo de la empresa" 
-                                className="max-w-full max-h-full object-contain"
-                            />
-                            {/* Placeholder mientras no tengas el logo */}
-                            <span className="text-white text-xs">LOGO</span>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+            {/* Header con logo y gradiente hermoso */}
+            <header className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 shadow-xl relative overflow-hidden">
+                {/* Elementos decorativos */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
+                    <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse delay-1000"></div>
+                </div>
+
+                <div className="relative max-w-7xl mx-auto px-6 py-6">
+                    {/* Contenedor del logo con animación */}
+                    <div className="flex justify-center mb-6">
+                        <div className="group relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-yellow-100/50 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                            <div className="relative w-28 h-20 bg-gradient-to-r from-white/95 to-yellow-50/95 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all duration-300 border border-white/30">
+                                <img 
+                                    src="/path/to/your/logo.png" 
+                                    alt="Logo de la empresa" 
+                                    className="max-w-full max-h-full object-contain"
+                                />
+                                {/* Placeholder mientras no tengas el logo */}
+                                <span className="text-slate-700 font-bold text-sm">LOGO</span>
+                            </div>
                         </div>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                        <h1 className="text-xl font-bold text-white">Sistema de Gestión de Brigadas</h1>
-                        <div className="flex items-center space-x-4">
-                            <span className="text-amber-100">
-                                {user.username} ({user.role})
-                            </span>
+                        <h1 className="text-2xl font-bold text-white drop-shadow-lg">Sistema de Gestión de Brigadas</h1>
+                        <div className="flex items-center space-x-6">
+                            <div className="text-white/90 bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm">
+                                <span className="font-medium">{user.username}</span>
+                                <span className="text-white/70 ml-2">({user.role})</span>
+                            </div>
                             <button
                                 onClick={handleLogout}
-                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                                className="group bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-medium"
                             >
-                                Cerrar Sesión
+                                <span className="group-hover:mr-2 transition-all duration-300">Cerrar Sesión</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto py-6 px-4">
+            <main className="max-w-7xl mx-auto py-8 px-6">
                 {user.role === 'encargado' && <AdminDashboard />}
             </main>
         </div>
