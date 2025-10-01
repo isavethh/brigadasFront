@@ -14,7 +14,7 @@ import {
     addLimpiezaGeneralItem,
     addMedicamentoItem,
     addRescateAnimalItem
-} from '../src/services/api';
+} from '../services/api';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
