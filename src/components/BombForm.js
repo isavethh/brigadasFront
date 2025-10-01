@@ -1302,18 +1302,18 @@ const BombForm = ({ onBack }) => {
 
     return (
         <div className={`min-h-screen ${bgColor} ${textColor} relative overflow-hidden`}>
-             {onBack && (
-      <button
-        onClick={onBack}
-        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg text-slate-900 hover:scale-110 transition-all duration-300"
-        aria-label="Volver"
-        title="Volver al inicio"
-        type="button"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
+         {onBack && (
+            <button
+             onClick={onBack}
+             className="fixed top-4 left-4 z-50 p-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg text-slate-900 hover:scale-110 transition-all duration-300"
+             aria-label="Volver"
+             title="Volver al inicio"
+             type="button"
+            >
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+             </svg>
+            </button>
     )}
 
             {/* Elementos decorativos de fondo */}
