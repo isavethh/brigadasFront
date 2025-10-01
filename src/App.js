@@ -13,6 +13,7 @@ function App() {
         const currentUser = getCurrentUser();
         if (currentUser) {
             setUser(currentUser);
+            setView('login'); // Asegura que se mantenga en la vista de administrador
         }
         setLoading(false);
     }, []);
@@ -42,8 +43,16 @@ function App() {
     if (!user) {
         if (view === 'login') return <Login onLogin={handleLogin} onBack={() => setView('landing')} />;
         if (view === 'brigada') return <BombForm onBack={() => setView('landing')} />;
+    }
 
-        // Pantalla inicial (landing)
+    if (user) {
+        return <AdminDashboard onBack={() => {
+            handleLogout();
+            setView('landing');
+        }} />;
+    }
+
+    // Pantalla inicial (landing)
        return (
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800 text-white relative overflow-hidden">
                 {/* Elementos decorativos de fondo */}
@@ -58,7 +67,7 @@ function App() {
     <div className="group relative">
         <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
             <img 
-                src="/path/to/your/logo.png" 
+                src="/images/alas.png" 
                 alt="Logo de la empresa" 
                 className="max-w-full max-h-full object-contain"
             />

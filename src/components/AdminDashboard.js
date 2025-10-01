@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getBrigadas, getBrigadaPDF } from '../services/api';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ onBack }) => {
     const [brigadas, setBrigadas] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -48,6 +48,16 @@ const AdminDashboard = () => {
     }
 
     return (
+        <div className="min-h-screen bg-gray-900">
+            <div className="p-4">
+                <button
+                    onClick={onBack}
+                    className="mb-4 px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400 transition-colors font-semibold flex items-center"
+                >
+                    <span className="mr-2">←</span> Volver al inicio
+                </button>
+            </div>
+            <div className="container mx-auto px-4 py-8">
         <div className="bg-gray-900 text-white min-h-screen p-4 sm:p-6 md:p-8">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
