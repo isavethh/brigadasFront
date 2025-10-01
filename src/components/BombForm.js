@@ -146,6 +146,8 @@ const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode =
     );
 };
                 
+// Comienzo del componente BombForm
+const BombForm = ({ onBack }) => {
     const [darkMode, setDarkMode] = useState(false);
     const [activeSection, setActiveSection] = useState('info');
     const [isSubmitting, setIsSubmitting] = useState(false);
