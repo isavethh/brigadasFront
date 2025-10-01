@@ -160,6 +160,7 @@ const BombForm = ({ onBack }) => {
     const [completedSections, setCompletedSections] = useState({});
     const [formErrors, setFormErrors] = useState({});
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const [showSummary, setShowSummary] = useState(false);
     const formRef = useRef();
 
     // Obtener colores de la sección actual
@@ -605,7 +606,8 @@ const BombForm = ({ onBack }) => {
             }
 
             if (isLastSection) {
-                setSubmitStatus({ success: true, message: '¡Formulario completado con éxito!', isFinal: true });
+                setSubmitStatus({ success: true, message: 'Formulario completado. Revisa el resumen antes de descargar.' });
+                setShowSummary(true);
             } else {
                 setSubmitStatus({ success: true, message: 'Sección guardada correctamente. Avanzando...' });
                 setActiveSection(SECTIONS[currentIndex + 1].id);
@@ -908,6 +910,69 @@ const BombForm = ({ onBack }) => {
         );
     };
 
+    const renderSummary = () => {
+        // Construir vistas resumidas de cada sección mínima
+        return (
+            <div className={`max-w-4xl mx-auto p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}> 
+                <h2 className="text-2xl font-bold mb-4">Resumen del formulario</h2>
+                <div className="space-y-4">
+                    <div className="border p-3 rounded">
+                        <h3 className="font-semibold">Información</h3>
+                        <p><span className="font-medium">Nombre:</span> {formData.nombre}</p>
+                        <p><span className="font-medium">Bomberos activos:</span> {formData.cantidadactivos}</p>
+                        <p><span className="font-medium">Comandante:</span> {formData.nombrecomandante} ({formData.celularcomandante})</p>
+                    </div>
+
+                    <div className="border p-3 rounded">
+                        <h3 className="font-semibold">EPP - Ropa (resumen)</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {Object.entries(eppRopa).map(([item, data]) => {
+                                const total = ['xs','s','m','l','xl'].reduce((acc,k)=>acc + (Number(data[k])||0), 0);
+                                if (total === 0 && !(data.observaciones||'').trim()) return null;
+                                return (
+                                    <div key={item} className="text-sm">
+                                        <span className="font-medium">{item}:</span> {total} {data.observaciones ? `- ${data.observaciones}` : ''}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="mt-2 text-right">
+                            <button onClick={() => { setShowSummary(false); setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar EPP</button>
+                        </div>
+                    </div>
+
+                    <div className="border p-3 rounded">
+                        <h3 className="font-semibold">Botas</h3>
+                        <div className="text-sm">
+                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (<div key={k}>{k}: {v}</div>))}
+                            {botas.otratalla && <div>Otra talla: {botas.otratalla}</div>}
+                            {botas.observaciones && <div>Obs: {botas.observaciones}</div>}
+                        </div>
+                        <div className="mt-2 text-right">
+                            <button onClick={() => { setShowSummary(false); setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Botas</button>
+                        </div>
+                    </div>
+
+                    <div className="border p-3 rounded">
+                        <h3 className="font-semibold">Herramientas / Equipo</h3>
+                        <div className="text-sm">
+                            {Object.entries(herramientas).map(([k,v]) => (v.cantidad>0 ? <div key={k}>{k}: {v.cantidad}</div> : null))}
+                            {herramientasCustom.map((c,i) => <div key={`hc-${i}`}>{c.item}: {c.cantidad}</div>)}
+                        </div>
+                        <div className="mt-2 text-right">
+                            <button onClick={() => { setShowSummary(false); setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end gap-3 mt-4">
+                        <button onClick={() => setShowSummary(false)} className="px-4 py-2 rounded border">Volver</button>
+                        <button onClick={async () => { setShowSummary(false); await generatePDF(); }} className="px-4 py-2 bg-blue-600 text-white rounded">Generar PDF</button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     // Estilos dinámicos para modo oscuro
     const bgColor = darkMode ? 'bg-gray-900' : 'bg-white';
     const textColor = darkMode ? 'text-gray-100' : 'text-gray-800';
@@ -916,6 +981,14 @@ const BombForm = ({ onBack }) => {
     const inputStyle = `w-full px-4 py-2 rounded-lg border ${darkMode
         ? 'bg-gray-700 border-gray-600 focus:ring-2 focus:ring-purple-500'
         : 'bg-white border-gray-300 focus:ring-2 focus:ring-blue-500'} focus:outline-none transition-colors`;
+
+    if (showSummary) {
+        return (
+            <div className={`min-h-screen ${bgColor} ${textColor} transition-colors duration-200 p-6`}>
+                {renderSummary()}
+            </div>
+        );
+    }
 
     return (
         <div className={`min-h-screen ${bgColor} ${textColor} transition-colors duration-200`}>

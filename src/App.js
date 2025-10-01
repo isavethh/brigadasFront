@@ -99,7 +99,7 @@ function App() {
                             alt="Logo de la empresa"
                             className="max-w-full max-h-full object-contain"
                         />
-                        <span className="text-slate-700 font-bold text-base tracking-wide">LOGO</span>
+                        <span className="text-slate-700 font-bold text-base tracking-wide">ALAS CHIQUITANAS</span>
                     </div>
                 </div>
             </div>
