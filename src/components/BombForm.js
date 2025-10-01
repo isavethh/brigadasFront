@@ -101,6 +101,7 @@ const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode =
     };
 
     return (
+        
         <div className={`flex items-center rounded-lg overflow-hidden border transition-all duration-300 ${
             darkMode 
                 ? 'border-amber-600/50 bg-slate-800/50 hover:border-amber-500' 
@@ -148,6 +149,7 @@ const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode =
         </div>
     );
 };
+
 
 const BombForm = ({ onBack }) => {
     const [darkMode, setDarkMode] = useState(false);
@@ -1628,6 +1630,20 @@ const BombForm = ({ onBack }) => {
                                 {/* EQUIPAMIENTO EPP CON TODAS LAS FUNCIONES CUSTOM - INCLUYENDO TODAS LAS CARACTERÍSTICAS QUE FALTABAN */}
                                 {activeSection === 'epp' && (
                                     <div className="space-y-10">
+                                        {onBack && (
+      <button
+        onClick={onBack}
+        className="fixed top-4 left-4 z-50 p-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg text-slate-900 hover:scale-110 transition-all duration-300"
+        aria-label="Volver"
+        title="Volver al inicio"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+    )}
+
                                         {/* EPP - Ropa */}
                                         <div className="space-y-6">
                                             <h2 className={`text-lg font-semibold border-l-4 pl-3 py-1 ${

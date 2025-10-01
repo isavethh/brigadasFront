@@ -5,6 +5,8 @@ import AdminDashboard from './components/AdminDashboard';
 import { getCurrentUser, logout } from './services/auth';
 import alas from './images/alas.png';
 
+if (view === 'brigada') return <BombForm onBack={() => setView('landing')} />;
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
