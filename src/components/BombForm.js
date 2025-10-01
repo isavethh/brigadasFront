@@ -916,60 +916,67 @@ const BombForm = ({ onBack }) => {
     };
 
     const renderSummary = () => {
-        // Construir vistas resumidas de cada sección mínima
+        // Usar la misma estética que las demás secciones del formulario
         return (
-            <div className={`max-w-4xl mx-auto p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}> 
-                <h2 className="text-2xl font-bold mb-4">Resumen del formulario</h2>
-                <div className="space-y-4">
-                    <div className="border p-3 rounded">
-                        <h3 className="font-semibold">Información</h3>
-                        <p><span className="font-medium">Nombre:</span> {formData.nombre}</p>
-                        <p><span className="font-medium">Bomberos activos:</span> {formData.cantidadactivos}</p>
-                        <p><span className="font-medium">Comandante:</span> {formData.nombrecomandante} ({formData.celularcomandante})</p>
+            <div className="space-y-6">
+                <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
+                    darkMode ? 'border-purple-400' : 'border-purple-600'
+                }`}>Resumen del Formulario</h2>
+
+                <div className={`grid grid-cols-1 gap-6`}> 
+                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <h3 className="font-semibold mb-2">Información</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                            <div><span className="font-medium">Nombre:</span> {formData.nombre || '-'}</div>
+                            <div><span className="font-medium">Bomberos activos:</span> {formData.cantidadactivos}</div>
+                            <div><span className="font-medium">Comandante:</span> {formData.nombrecomandante || '-'} </div>
+                            <div><span className="font-medium">Teléfono comando:</span> {formData.celularcomandante || '-'}</div>
+                        </div>
                     </div>
 
-                    <div className="border p-3 rounded">
-                        <h3 className="font-semibold">EPP - Ropa (resumen)</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <h3 className="font-semibold mb-2">EPP - Ropa (resumen)</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                             {Object.entries(eppRopa).map(([item, data]) => {
                                 const total = ['xs','s','m','l','xl'].reduce((acc,k)=>acc + (Number(data[k])||0), 0);
                                 if (total === 0 && !(data.observaciones||'').trim()) return null;
                                 return (
-                                    <div key={item} className="text-sm">
-                                        <span className="font-medium">{item}:</span> {total} {data.observaciones ? `- ${data.observaciones}` : ''}
+                                    <div key={item} className="flex justify-between">
+                                        <div className="font-medium">{item}</div>
+                                        <div className="text-gray-500">{total}{data.observaciones ? ` — ${data.observaciones}` : ''}</div>
                                     </div>
                                 );
                             })}
                         </div>
-                        <div className="mt-2 text-right">
+                        <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar EPP</button>
                         </div>
                     </div>
 
-                    <div className="border p-3 rounded">
-                        <h3 className="font-semibold">Botas</h3>
+                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <h3 className="font-semibold mb-2">Botas</h3>
                         <div className="text-sm">
-                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (<div key={k}>{k}: {v}</div>))}
+                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (v>0 ? <div key={k}>{k}: {v}</div> : null))}
                             {botas.otratalla && <div>Otra talla: {botas.otratalla}</div>}
                             {botas.observaciones && <div>Obs: {botas.observaciones}</div>}
                         </div>
-                        <div className="mt-2 text-right">
+                        <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('epp'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Botas</button>
                         </div>
                     </div>
 
-                    <div className="border p-3 rounded">
-                        <h3 className="font-semibold">Herramientas / Equipo</h3>
+                    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
+                        <h3 className="font-semibold mb-2">Herramientas / Equipo</h3>
                         <div className="text-sm">
                             {Object.entries(herramientas).map(([k,v]) => (v.cantidad>0 ? <div key={k}>{k}: {v.cantidad}</div> : null))}
                             {herramientasCustom.map((c,i) => <div key={`hc-${i}`}>{c.item}: {c.cantidad}</div>)}
                         </div>
-                        <div className="mt-2 text-right">
+                        <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-4">
+                    <div className="flex justify-end gap-3 mt-2">
                         <button onClick={() => setActiveSection(SECTIONS[SECTIONS.length-2].id)} className="px-4 py-2 rounded border">Volver</button>
                         <button onClick={async () => { await generatePDF(); }} className="px-4 py-2 bg-blue-600 text-white rounded">Generar PDF</button>
                     </div>
