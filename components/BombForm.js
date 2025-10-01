@@ -18,24 +18,24 @@ import {
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Paleta de colores para cada sección
+// Paleta de colores para cada secciÃ³n
 const SECTION_COLORS = [
-    { primary: '#9c27b0', secondary: '#e1bee7' }, // Lila - Información
+    { primary: '#9c27b0', secondary: '#e1bee7' }, // Lila - InformaciÃ³n
     { primary: '#7b1fa2', secondary: '#ce93d8' }, // Lila oscuro - EPP
-    { primary: '#673ab7', secondary: '#b39ddb' }, // Índigo - Herramientas
-    { primary: '#3f51b5', secondary: '#9fa8da' }, // Azul - Logística
-    { primary: '#2196f3', secondary: '#90caf9' }, // Azul claro - Alimentación
+    { primary: '#673ab7', secondary: '#b39ddb' }, // Ãndigo - Herramientas
+    { primary: '#3f51b5', secondary: '#9fa8da' }, // Azul - LogÃ­stica
+    { primary: '#2196f3', secondary: '#90caf9' }, // Azul claro - AlimentaciÃ³n
     { primary: '#03a9f4', secondary: '#81d4fa' }, // Cian - Equipo de campo
     { primary: '#00bcd4', secondary: '#80deea' }, // Turquesa - Limpieza
     { primary: '#009688', secondary: '#80cbc4' }, // Verde azulado - Medicamentos
     { primary: '#4caf50', secondary: '#a5d6a7' }  // Verde - Rescate animal
 ];
 
-// Configuración de secciones con endpoints y reglas básicas
+// ConfiguraciÃ³n de secciones con endpoints y reglas bÃ¡sicas
 const SECTIONS = [
     {
         id: 'info',
-        name: 'Información',
+        name: 'InformaciÃ³n',
         endpoint: '',
         fields: ['nombre', 'cantidadactivos', 'nombrecomandante', 'celularcomandante', 'encargadologistica', 'celularlogistica', 'numerosemergencia'],
         required: ['nombre', 'cantidadactivos', 'nombrecomandante', 'celularcomandante']
@@ -54,13 +54,13 @@ const SECTIONS = [
     },
     {
         id: 'logistics',
-        name: 'Logística',
+        name: 'LogÃ­stica',
         endpoint: '/logistica-repuestos',
         fields: ['item', 'costo', 'observaciones']
     },
     {
         id: 'food',
-        name: 'Alimentación',
+        name: 'AlimentaciÃ³n',
         endpoint: '/alimentacion',
         fields: ['item', 'cantidad', 'observaciones']
     },
@@ -90,7 +90,7 @@ const SECTIONS = [
     }
 ];
 
-// Componente de input numérico con botones +/-
+// Componente de input numÃ©rico con botones +/-
 const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode = false, ...props }) => {
     const handleIncrement = () => {
         onChange(Math.min(value + 1, max || Infinity));
@@ -113,7 +113,7 @@ const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode =
                 aria-label="Decrementar"
                 disabled={value <= min}
             >
-                −
+                âˆ’
             </button>
             <input
                 type="number"
@@ -161,40 +161,40 @@ const BombForm = () => {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
     const formRef = useRef();
 
-    // Obtener colores de la sección actual
+    // Obtener colores de la secciÃ³n actual
     const currentSectionIndex = SECTIONS.findIndex(s => s.id === activeSection);
     const currentColors = SECTION_COLORS[currentSectionIndex] || SECTION_COLORS[0];
 
-    // Catálogos de ítems por sección
-    const EPP_ROPA_ITEMS = ['Camisa Forestal', 'Pantalón Forestal', 'Overol FR'];
+    // CatÃ¡logos de Ã­tems por secciÃ³n
+    const EPP_ROPA_ITEMS = ['Camisa Forestal', 'PantalÃ³n Forestal', 'Overol FR'];
     const EPP_EQUIPO_ITEMS = [
         'Esclavina', 'Linterna', 'Antiparra', 'Casco Forestal Ala Ancha',
-        'Máscara para Polvo y Partículas', 'Máscara Media Cara', 'Barbijos'
+        'MÃ¡scara para Polvo y PartÃ­culas', 'MÃ¡scara Media Cara', 'Barbijos'
     ];
     const BOTAS_SIZES = ['37', '38', '39', '40', '41', '42', '43', 'otra'];
     const GUANTES_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'otra'];
     const HERRAMIENTAS_ITEMS = [
-        'Linternas de Cabeza', 'Pilas AA', 'Pilas AAA', 'Azadón',
+        'Linternas de Cabeza', 'Pilas AA', 'Pilas AAA', 'AzadÃ³n',
         'Pala con Mango de Fibra', 'Rastrillo Mango de Fibra',
         'McLeod Mango de Fibra', 'Batefuego', 'Gorgui',
         'Pulasky con Mango de Fibra', 'Quemador de Goteo',
         'Mochila Forestal', 'Escobeta de Alambre'
     ];
     const LOGISTICA_REPUESTOS_ITEMS = [
-        'Gasolina', 'Diésel', 'Amortiguadores', 'Prensa Disco',
-        'Rectificación de Frenos', 'Llantas', 'Aceite de Motor',
+        'Gasolina', 'DiÃ©sel', 'Amortiguadores', 'Prensa Disco',
+        'RectificaciÃ³n de Frenos', 'Llantas', 'Aceite de Motor',
         'Grasa', 'Cambio de Aceite', 'Otro Tipo de Arreglo'
     ];
     const ALIMENTACION_ITEMS = [
         'Alimentos y Bebidas', 'Agua', 'Rehidratantes', 'Barras Energizantes',
-        'Lata de Atún', 'Lata de Frejol', 'Lata de Viandada', 'Lata de Chorizos',
+        'Lata de AtÃºn', 'Lata de Frejol', 'Lata de Viandada', 'Lata de Chorizos',
         'Refresco en Sobres', 'Leche Polvo', 'Frutos Secos',
         'Pastillas de Menta o Dulces', 'Alimentos No Perecederos'
     ];
-    const CAMPO_ITEMS = ['Carpas', 'Colchonetas', 'Mochilas Personales', 'Mantas', 'Cuerdas', 'Radio Comunicadores', 'Baterías Portátiles'];
-    const LIMPIEZA_PERSONAL_ITEMS = ['Papel Higiénico', 'Cepillos de Dientes', 'Jabón', 'Pasta Dental', 'Toallas', 'Alcohol en Gel'];
+    const CAMPO_ITEMS = ['Carpas', 'Colchonetas', 'Mochilas Personales', 'Mantas', 'Cuerdas', 'Radio Comunicadores', 'BaterÃ­as PortÃ¡tiles'];
+    const LIMPIEZA_PERSONAL_ITEMS = ['Papel HigiÃ©nico', 'Cepillos de Dientes', 'JabÃ³n', 'Pasta Dental', 'Toallas', 'Alcohol en Gel'];
     const LIMPIEZA_GENERAL_ITEMS = ['Detergente', 'Escobas', 'Trapeadores', 'Bolsas de Basura', 'Lavandina', 'Desinfectante'];
-    const MEDICAMENTOS_ITEMS = ['Paracetamol', 'Ibuprofeno', 'Antibióticos', 'Suero Oral', 'Gasas', 'Vendas', 'Alcohol', 'Yodo', 'Curitas'];
+    const MEDICAMENTOS_ITEMS = ['Paracetamol', 'Ibuprofeno', 'AntibiÃ³ticos', 'Suero Oral', 'Gasas', 'Vendas', 'Alcohol', 'Yodo', 'Curitas'];
     const RESCATE_ANIMAL_ITEMS = ['Jaulas de Transporte', 'Collares', 'Comida para Mascotas', 'Guantes Especiales', 'Medicamentos Veterinarios'];
 
     // Estado del formulario principal
@@ -208,7 +208,7 @@ const BombForm = () => {
         numerosemergencia: ''
     });
 
-    // Estados específicos por sección
+    // Estados especÃ­ficos por secciÃ³n
     const [eppRopa, setEppRopa] = useState(() =>
         Object.fromEntries(EPP_ROPA_ITEMS.map(item => [item, {
             xs: 0,
@@ -298,7 +298,7 @@ const BombForm = () => {
         }
     };
 
-    // Handlers específicos por sección
+    // Handlers especÃ­ficos por secciÃ³n
     const handleEppRopaSizeChange = (item, sizeKey, value) => {
         setEppRopa(prev => ({
             ...prev,
@@ -354,7 +354,7 @@ const BombForm = () => {
         }));
     };
 
-    // Validar sección actual con más detalle
+    // Validar secciÃ³n actual con mÃ¡s detalle
     const validateSection = (sectionId) => {
         const section = SECTIONS.find(s => s.id === sectionId);
         if (!section || !section.required) return true;
@@ -372,7 +372,7 @@ const BombForm = () => {
             } else if ((field === 'celularcomandante' || field === 'celularlogistica')) {
                 const phoneValue = formData[field].toString().replace(/\D/g, '');
                 if (phoneValue.length !== 8) {
-                    errors[field] = 'El teléfono debe tener 8 dígitos';
+                    errors[field] = 'El telÃ©fono debe tener 8 dÃ­gitos';
                     isValid = false;
                 }
             }
@@ -382,7 +382,7 @@ const BombForm = () => {
         return isValid;
     };
 
-    // Navegación entre secciones con validación
+    // NavegaciÃ³n entre secciones con validaciÃ³n
     const goToSection = (sectionId) => {
         if (validateSection(activeSection)) {
             setActiveSection(sectionId);
@@ -396,7 +396,7 @@ const BombForm = () => {
     // ====================
     // Ayudantes de persistencia a la API
     // ====================
-    // Construye el payload de Información de Brigada que espera la API
+    // Construye el payload de InformaciÃ³n de Brigada que espera la API
     const buildInfoPayload = () => ({
         nombre: formData.nombre,
         cantidadactivos: Number(formData.cantidadactivos) || 0,
@@ -413,7 +413,7 @@ const BombForm = () => {
         if (!brigadaId) {
             const { data } = await createBrigada(payload);
             if (!data?.brigadaId) {
-                throw new Error('No se recibió brigadaId desde la API');
+                throw new Error('No se recibiÃ³ brigadaId desde la API');
             }
             setBrigadaId(data.brigadaId);
             return data.brigadaId;
@@ -422,7 +422,7 @@ const BombForm = () => {
         return brigadaId;
     };
 
-    // Persiste EPP Ropa: envía por prenda y talla con cantidad > 0
+    // Persiste EPP Ropa: envÃ­a por prenda y talla con cantidad > 0
     const persistEppRopa = async (id) => {
         const sizeKeys = ['xs','s','m','l','xl'];
         const tasks = [];
@@ -441,7 +441,7 @@ const BombForm = () => {
                 }
             });
         });
-        // Ítems personalizados de ropa
+        // Ãtems personalizados de ropa
         (eppRopaCustom || []).forEach((row) => {
             sizeKeys.forEach((sizeKey) => {
                 const qty = Number(row[sizeKey]) || 0;
@@ -461,7 +461,7 @@ const BombForm = () => {
         await Promise.all(tasks);
     };
 
-    // Persiste Botas: envía por cada talla con cantidad > 0
+    // Persiste Botas: envÃ­a por cada talla con cantidad > 0
     const persistBotas = async (id) => {
         const sizeKeys = ['37','38','39','40','41','42','43'];
         const tasks = [];
@@ -479,7 +479,7 @@ const BombForm = () => {
                 );
             }
         });
-        // Talla "otra": la API sólo guarda el texto en otratalla
+        // Talla "otra": la API sÃ³lo guarda el texto en otratalla
         if ((botas.otratalla || '').trim()) {
             tasks.push(
                 upsertBotas(id, {
@@ -495,7 +495,7 @@ const BombForm = () => {
         await Promise.all(tasks);
     };
 
-    // Persiste Guantes: la API espera todos los tamaños en un único POST
+    // Persiste Guantes: la API espera todos los tamaÃ±os en un Ãºnico POST
     const persistGuantes = async (id) => {
         const payload = {
             xs: Number(guantes.XS) || 0,
@@ -512,7 +512,7 @@ const BombForm = () => {
         await upsertGuantes(id, payload);
     };
 
-    // Utilidad para iterar y enviar ítems simples { item, cantidad, observaciones }
+    // Utilidad para iterar y enviar Ã­tems simples { item, cantidad, observaciones }
     const persistSimpleItems = async (id, itemsMap, customList, addItemFn) => {
         const tasks = [];
         Object.entries(itemsMap).forEach(([item, data]) => {
@@ -534,7 +534,7 @@ const BombForm = () => {
         await Promise.all(tasks);
     };
 
-    // Utilidad para iterar y enviar ítems con costo { item, costo, observaciones }
+    // Utilidad para iterar y enviar Ã­tems con costo { item, costo, observaciones }
     const persistCostItems = async (id, itemsMap, customList, addItemFn) => {
         const tasks = [];
         Object.entries(itemsMap).forEach(([item, data]) => {
@@ -556,7 +556,7 @@ const BombForm = () => {
         await Promise.all(tasks);
     };
 
-    // Manejador de envío del formulario
+    // Manejador de envÃ­o del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -574,11 +574,11 @@ const BombForm = () => {
             if (activeSection === 'info') {
                 id = await persistInfo();
             } else if (!id) {
-                // Si por alguna razón se intenta guardar otra sección sin ID, crea primero la brigada
+                // Si por alguna razÃ³n se intenta guardar otra secciÃ³n sin ID, crea primero la brigada
                 id = await persistInfo();
             }
 
-            // 2) Persistencia específica por sección
+            // 2) Persistencia especÃ­fica por secciÃ³n
             if (activeSection === 'epp') {
                 await persistEppRopa(id);
                 await persistBotas(id);
@@ -603,9 +603,9 @@ const BombForm = () => {
             }
 
             if (isLastSection) {
-                setSubmitStatus({ success: true, message: '¡Formulario completado con éxito!', isFinal: true });
+                setSubmitStatus({ success: true, message: 'Â¡Formulario completado con Ã©xito!', isFinal: true });
             } else {
-                setSubmitStatus({ success: true, message: 'Sección guardada correctamente. Avanzando...' });
+                setSubmitStatus({ success: true, message: 'SecciÃ³n guardada correctamente. Avanzando...' });
                 setActiveSection(SECTIONS[currentIndex + 1].id);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setTimeout(() => setSubmitStatus({ success: null, message: '' }), 1500);
@@ -624,18 +624,18 @@ const BombForm = () => {
         try {
             const doc = new jsPDF('p', 'mm', 'a4');
 
-            // Configuración
+            // ConfiguraciÃ³n
             const margin = 15;
             let y = margin;
             const pageWidth = doc.internal.pageSize.getWidth();
             const maxWidth = pageWidth - 2 * margin;
 
-            // Función para agregar texto con manejo de saltos de página
+            // FunciÃ³n para agregar texto con manejo de saltos de pÃ¡gina
             const addText = (text, size = 12, style = 'normal', x = margin) => {
                 doc.setFontSize(size);
                 doc.setFont(undefined, style);
 
-                // Manejo de saltos de página
+                // Manejo de saltos de pÃ¡gina
                 if (y > 280) {
                     doc.addPage();
                     y = margin;
@@ -655,22 +655,22 @@ const BombForm = () => {
             doc.setFontSize(10);
             doc.text(`Cuerpo de Bomberos | ${new Date().toLocaleDateString()}`, pageWidth / 2, 22, { align: 'center' });
 
-            // Resetear posición y color
+            // Resetear posiciÃ³n y color
             y = 35;
             doc.setTextColor(0, 0, 0);
 
-            // Sección: Información de la Brigada
-            addText('1. INFORMACIÓN DE LA BRIGADA', 14, 'bold');
+            // SecciÃ³n: InformaciÃ³n de la Brigada
+            addText('1. INFORMACIÃ“N DE LA BRIGADA', 14, 'bold');
             addText(`Nombre: ${formData.nombre}`);
             addText(`Bomberos activos: ${formData.cantidadactivos}`);
             addText(`Comandante: ${formData.nombrecomandante}`);
             addText(`Celular comandante: ${formData.celularcomandante}`);
-            addText(`Encargado de logística: ${formData.encargadologistica || 'No especificado'}`);
-            addText(`Celular logística: ${formData.celularlogistica || 'No especificado'}`);
-            addText(`Números de emergencia: ${formData.numerosemergencia || 'No especificado'}`);
+            addText(`Encargado de logÃ­stica: ${formData.encargadologistica || 'No especificado'}`);
+            addText(`Celular logÃ­stica: ${formData.celularlogistica || 'No especificado'}`);
+            addText(`NÃºmeros de emergencia: ${formData.numerosemergencia || 'No especificado'}`);
             y += 10;
 
-            // Función para generar tablas de datos
+            // FunciÃ³n para generar tablas de datos
             const generateTable = (title, headers, data) => {
                 addText(title, 14, 'bold');
                 y += 5;
@@ -684,7 +684,7 @@ const BombForm = () => {
                 Object.entries(data).forEach(([key, value]) => {
                     if (typeof value === 'object' && value !== null) {
                         const row = headers.map(header => {
-                            if (header === 'Artículo' || header === 'Item') return key;
+                            if (header === 'ArtÃ­culo' || header === 'Item') return key;
                             return value[header.toLowerCase()] || '';
                         });
                         tableData.push(row);
@@ -705,13 +705,13 @@ const BombForm = () => {
                 y = doc.lastAutoTable.finalY + 10;
             };
 
-            // Sección: EPP - Ropa
+            // SecciÃ³n: EPP - Ropa
             generateTable('2. EQUIPAMIENTO EPP - ROPA',
-                ['Artículo', 'XS', 'S', 'M', 'L', 'XL', 'Observaciones'],
+                ['ArtÃ­culo', 'XS', 'S', 'M', 'L', 'XL', 'Observaciones'],
                 eppRopa
             );
 
-            // Sección: EPP - Botas
+            // SecciÃ³n: EPP - Botas
             addText('3. EQUIPAMIENTO EPP - BOTAS', 14, 'bold');
             Object.entries(botas).forEach(([talla, cantidad]) => {
                 if (talla !== 'observaciones' && talla !== 'otratalla') {
@@ -722,7 +722,7 @@ const BombForm = () => {
             if (botas.observaciones) addText(`Observaciones: ${botas.observaciones}`);
             y += 10;
 
-            // Sección: EPP - Equipo
+            // SecciÃ³n: EPP - Equipo
             generateTable('4. EQUIPAMIENTO EPP - OTROS EQUIPOS',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -731,7 +731,7 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Herramientas
+            // SecciÃ³n: Herramientas
             generateTable('5. HERRAMIENTAS',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -740,8 +740,8 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Logística
-            generateTable('6. LOGÍSTICA VEHÍCULOS',
+            // SecciÃ³n: LogÃ­stica
+            generateTable('6. LOGÃSTICA VEHÃCULOS',
                 ['Item', 'Costo (S/.)', 'Observaciones'],
                 Object.fromEntries([
                     ...LOGISTICA_REPUESTOS_ITEMS.map(item => [item, logisticaRepuestos[item]]),
@@ -749,8 +749,8 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Alimentación
-            generateTable('7. ALIMENTACIÓN',
+            // SecciÃ³n: AlimentaciÃ³n
+            generateTable('7. ALIMENTACIÃ“N',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
                     ...ALIMENTACION_ITEMS.map(item => [item, alimentacion[item]]),
@@ -758,7 +758,7 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Equipo de campo
+            // SecciÃ³n: Equipo de campo
             generateTable('8. EQUIPO DE CAMPO',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -767,7 +767,7 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Limpieza
+            // SecciÃ³n: Limpieza
             generateTable('9. LIMPIEZA PERSONAL',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -784,7 +784,7 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Medicamentos
+            // SecciÃ³n: Medicamentos
             generateTable('11. MEDICAMENTOS',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -793,7 +793,7 @@ const BombForm = () => {
                 ])
             );
 
-            // Sección: Rescate animal
+            // SecciÃ³n: Rescate animal
             generateTable('12. RESCATE ANIMAL',
                 ['Item', 'Cantidad', 'Observaciones'],
                 Object.fromEntries([
@@ -802,10 +802,10 @@ const BombForm = () => {
                 ])
             );
 
-            // Pie de página
+            // Pie de pÃ¡gina
             doc.setFontSize(10);
             doc.setTextColor(100);
-            doc.text('Formulario generado automáticamente por el Sistema de Gestión de Brigadas',
+            doc.text('Formulario generado automÃ¡ticamente por el Sistema de GestiÃ³n de Brigadas',
                 pageWidth / 2, 290, { align: 'center' });
 
             // Guardar PDF
@@ -826,7 +826,7 @@ const BombForm = () => {
         }
     };
 
-    // Renderizar navegación con indicador de progreso
+    // Renderizar navegaciÃ³n con indicador de progreso
     const renderNavigation = () => {
         const currentIndex = SECTIONS.findIndex(s => s.id === activeSection);
         const isLastSection = currentIndex === SECTIONS.length - 1;
@@ -906,7 +906,7 @@ const BombForm = () => {
         );
     };
 
-    // Estilos dinámicos para modo oscuro
+    // Estilos dinÃ¡micos para modo oscuro
     const bgColor = darkMode ? 'bg-gray-900' : 'bg-white';
     const textColor = darkMode ? 'text-gray-100' : 'text-gray-800';
     const cardBg = darkMode ? 'bg-gray-800' : 'bg-gray-50';
@@ -917,7 +917,7 @@ const BombForm = () => {
 
     return (
         <div className={`min-h-screen ${bgColor} ${textColor} transition-colors duration-200`}>
-            {/* Botón de modo oscuro flotante */}
+            {/* BotÃ³n de modo oscuro flotante */}
             <button
                 onClick={toggleDarkMode}
                 className={`fixed top-4 right-4 z-50 p-2 rounded-full shadow-lg ${
@@ -927,7 +927,7 @@ const BombForm = () => {
                 } transition-colors`}
                 aria-label={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
             >
-                {darkMode ? '☀️' : '🌙'}
+                {darkMode ? 'â˜€ï¸' : 'ðŸŒ™'}
             </button>
 
             <form
@@ -937,7 +937,7 @@ const BombForm = () => {
                 } transition-colors`}
                 ref={formRef}
             >
-                {/* Header con gradiente dinámico */}
+                {/* Header con gradiente dinÃ¡mico */}
 <div
     className="py-6 px-8 text-white"
     style={{
@@ -950,11 +950,11 @@ const BombForm = () => {
 >
     <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="flex items-center mb-4 md:mb-0">
-            {/* Botón de regresar */}
+            {/* BotÃ³n de regresar */}
             <button 
         onClick={onBack}
         className="absolute top-4 left-4 p-2 rounded-full hover:bg-black hover:bg-opacity-20 transition-colors"
-        title="Volver atrás"
+        title="Volver atrÃ¡s"
     >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -975,11 +975,11 @@ const BombForm = () => {
         <div className={`px-4 py-2 rounded-lg ${
             darkMode ? 'bg-black bg-opacity-30' : 'bg-white bg-opacity-30'
         } backdrop-blur-sm`}>
-            <p className="text-sm">Sección: <span className="font-semibold">{SECTIONS[currentSectionIndex]?.name}</span></p>
+            <p className="text-sm">SecciÃ³n: <span className="font-semibold">{SECTIONS[currentSectionIndex]?.name}</span></p>
         </div>
     </div>
 </div>
-                {/* Navegación entre secciones */}
+                {/* NavegaciÃ³n entre secciones */}
                 <div className={`px-4 py-3 border-b ${
                     darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
                 }`}>
@@ -1021,7 +1021,7 @@ const BombForm = () => {
                                     <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full ${
                                         submitStatus.success ? 'bg-green-600' : 'bg-red-600'
                                     } text-white`}>
-                                        {submitStatus.success ? '✓' : '✗'}
+                                        {submitStatus.success ? 'âœ“' : 'âœ—'}
                                     </span>
                                     <div>
                                         <p className={`font-semibold ${
@@ -1029,7 +1029,7 @@ const BombForm = () => {
                                                 ? darkMode ? 'text-green-300' : 'text-green-800'
                                                 : darkMode ? 'text-red-300' : 'text-red-800'
                                         }`}>
-                                            {submitStatus.success ? '¡Formulario completado!' : 'Error al procesar'}
+                                            {submitStatus.success ? 'Â¡Formulario completado!' : 'Error al procesar'}
                                         </p>
                                         <p className={`text-sm ${
                                             submitStatus.success
@@ -1069,13 +1069,13 @@ const BombForm = () => {
                         </div>
                     )}
 
-                    {/* Sección de Información */}
+                    {/* SecciÃ³n de InformaciÃ³n */}
                     {activeSection === 'info' && (
                         <div className="space-y-6">
                             <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
                                 darkMode ? 'border-purple-400' : 'border-purple-600'
                             }`}>
-                                Información Básica de la Brigada
+                                InformaciÃ³n BÃ¡sica de la Brigada
                             </h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1093,7 +1093,7 @@ const BombForm = () => {
                                             formErrors.nombre ? 'border-red-500 focus:ring-red-500' :
                                                 darkMode ? 'focus:border-purple-400' : 'focus:border-blue-500'
                                         }`}
-                                        placeholder="Ej: Brigada San Martín"
+                                        placeholder="Ej: Brigada San MartÃ­n"
                                         required
                                     />
                                     {formErrors.nombre && (
@@ -1122,7 +1122,7 @@ const BombForm = () => {
                                     <p className={`text-xs mt-1 ${
                                         darkMode ? 'text-gray-400' : 'text-gray-500'
                                     }`}>
-                                        Mínimo 1 bombero activo
+                                        MÃ­nimo 1 bombero activo
                                     </p>
                                 </div>
 
@@ -1148,10 +1148,10 @@ const BombForm = () => {
                                     )}
                                 </div>
 
-                                {/* Campo Teléfono Comandante */}
+                                {/* Campo TelÃ©fono Comandante */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-1 ${textColor}`}>
-                                        Teléfono Comandante <span className="text-red-500">*</span>
+                                        TelÃ©fono Comandante <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         type="tel"
@@ -1172,14 +1172,14 @@ const BombForm = () => {
                                     <p className={`text-xs mt-1 ${
                                         darkMode ? 'text-gray-400' : 'text-gray-500'
                                     }`}>
-                                        8 dígitos sin espacios ni guiones
+                                        8 dÃ­gitos sin espacios ni guiones
                                     </p>
                                 </div>
 
-                                {/* Campo Encargado Logística */}
+                                {/* Campo Encargado LogÃ­stica */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-1 ${textColor}`}>
-                                        Encargado de Logística
+                                        Encargado de LogÃ­stica
                                     </label>
                                     <input
                                         type="text"
@@ -1193,10 +1193,10 @@ const BombForm = () => {
                                     />
                                 </div>
 
-                                {/* Campo Teléfono Logística */}
+                                {/* Campo TelÃ©fono LogÃ­stica */}
                                 <div>
                                     <label className={`block text-sm font-medium mb-1 ${textColor}`}>
-                                        Teléfono Logística
+                                        TelÃ©fono LogÃ­stica
                                     </label>
                                     <input
                                         type="tel"
@@ -1215,10 +1215,10 @@ const BombForm = () => {
                                     )}
                                 </div>
 
-                                {/* Campo Números de Emergencia */}
+                                {/* Campo NÃºmeros de Emergencia */}
                                 <div className="md:col-span-2">
                                     <label className={`block text-sm font-medium mb-1 ${textColor}`}>
-                                        Números de Emergencia (Opcional)
+                                        NÃºmeros de Emergencia (Opcional)
                                     </label>
                                     <input
                                         type="tel"
@@ -1241,7 +1241,7 @@ const BombForm = () => {
                             <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
                                 darkMode ? 'border-purple-400' : 'border-purple-600'
                             }`}>
-                                Equipamiento de Protección Personal
+                                Equipamiento de ProtecciÃ³n Personal
                             </h2>
 
                             <div className="grid grid-cols-1 gap-6">
@@ -1252,7 +1252,7 @@ const BombForm = () => {
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                                             <tr>
-                                                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Artículo</th>
+                                                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">ArtÃ­culo</th>
                                                 <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">XS</th>
                                                 <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">S</th>
                                                 <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">M</th>
@@ -1382,11 +1382,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setEppEquipoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {eppEquipoCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {eppEquipoCustom.map((row, idx) => (
@@ -1396,7 +1396,7 @@ const BombForm = () => {
                                                         className={`px-2 py-1 border rounded ${
                                                             darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
                                                         }`}
-                                                        placeholder="Nombre del ítem"
+                                                        placeholder="Nombre del Ã­tem"
                                                         value={row.item}
                                                         onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i) => i===idx ? { ...r, item: e.target.value } : r))}
                                                     />
@@ -1445,11 +1445,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setEppRopaCustom(prev => [...prev, { item: '', xs:0, s:0, m:0, l:0, xl:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {eppRopaCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay prendas personalizadas aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay prendas personalizadas aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {eppRopaCustom.map((row, idx) => (
@@ -1522,7 +1522,7 @@ const BombForm = () => {
                                                 className={`flex-1 px-2 py-1 border rounded ${
                                                     darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
                                                 }`}
-                                                placeholder="Describe talla extra (por ej. Talla única, 7.5, etc.)"
+                                                placeholder="Describe talla extra (por ej. Talla Ãºnica, 7.5, etc.)"
                                                 value={guantes.otratalla}
                                                 maxLength={80}
                                                 onChange={(e) => handleGuantesOtraTallaText(e.target.value)}
@@ -1581,11 +1581,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setHerramientasCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {herramientasCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {herramientasCustom.map((row, idx) => (
@@ -1634,13 +1634,13 @@ const BombForm = () => {
                         </div>
                     )}
 
-                    {/* Logística Vehículos */}
+                    {/* LogÃ­stica VehÃ­culos */}
                     {activeSection === 'logistics' && (
                         <div className="space-y-6">
                             <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
                                 darkMode ? 'border-blue-400' : 'border-blue-600'
                             }`}>
-                                Logística: Repuestos y Combustibles
+                                LogÃ­stica: Repuestos y Combustibles
                             </h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1671,7 +1671,7 @@ const BombForm = () => {
                                     </div>
                                 ))}
 
-                                {/* Logística - Otros */}
+                                {/* LogÃ­stica - Otros */}
                                 <div className={`md:col-span-2 ${cardBg} p-4 rounded-lg border ${borderColor}`}>
                                     <div className="mb-3 flex items-center justify-between">
                                         <h3 className="font-semibold">Otros</h3>
@@ -1684,11 +1684,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setLogisticaRepuestosCustom(prev => [...prev, { item:'', costo:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {logisticaRepuestosCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {logisticaRepuestosCustom.map((row, idx) => (
@@ -1745,13 +1745,13 @@ const BombForm = () => {
                         </div>
                     )}
 
-                    {/* Alimentación */}
+                    {/* AlimentaciÃ³n */}
                     {activeSection === 'food' && (
                         <div className="space-y-6">
                             <h2 className={`text-xl font-bold border-l-4 pl-3 py-1 ${
                                 darkMode ? 'border-blue-300' : 'border-blue-500'
                             }`}>
-                                Alimentación y Bebidas
+                                AlimentaciÃ³n y Bebidas
                             </h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1779,7 +1779,7 @@ const BombForm = () => {
                                     </div>
                                 ))}
 
-                                {/* Alimentación - Otros */}
+                                {/* AlimentaciÃ³n - Otros */}
                                 <div className={`md:col-span-2 ${cardBg} p-4 rounded-lg border ${borderColor}`}>
                                     <div className="mb-3 flex items-center justify-between">
                                         <h3 className="font-semibold">Otros</h3>
@@ -1792,11 +1792,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setAlimentacionCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {alimentacionCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {alimentacionCustom.map((row, idx) => (
@@ -1891,11 +1891,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setLogisticaCampoCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {logisticaCampoCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {logisticaCampoCustom.map((row, idx) => (
@@ -1991,11 +1991,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setLimpiezaPersonalCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {limpiezaPersonalCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {limpiezaPersonalCustom.map((row, idx) => (
@@ -2086,11 +2086,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setLimpiezaGeneralCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {limpiezaGeneralCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {limpiezaGeneralCustom.map((row, idx) => (
@@ -2185,11 +2185,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setMedicamentosCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {medicamentosCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {medicamentosCustom.map((row, idx) => (
@@ -2284,11 +2284,11 @@ const BombForm = () => {
                                             }`}
                                             onClick={() => setRescateAnimalCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
                                         >
-                                            Añadir otro
+                                            AÃ±adir otro
                                         </button>
                                     </div>
                                     {rescateAnimalCustom.length === 0 ? (
-                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay Ã­tems personalizados aÃºn.</p>
                                     ) : (
                                         <div className="space-y-3">
                                             {rescateAnimalCustom.map((row, idx) => (
@@ -2337,7 +2337,7 @@ const BombForm = () => {
                         </div>
                     )}
 
-                    {/* Navegación inferior */}
+                    {/* NavegaciÃ³n inferior */}
                     <div className="mt-8">
                         <div className="mb-4 w-full bg-gray-200 rounded-full h-2.5">
                             <div
