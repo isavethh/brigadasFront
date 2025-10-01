@@ -151,15 +151,8 @@ const Login = ({ onLogin, onBack }) => {
                             </button>
                         </form>
 
-                        {/* Link adicional */}
-                        <div className="mt-6 text-center">
-                            <p className="text-slate-400 text-sm">
-                                ¿Problemas para acceder? 
-                                <span className="text-yellow-400 hover:text-yellow-300 ml-1 cursor-pointer transition-colors">
-                                    Contacta al administrador
-                                </span>
-                            </p>
-                        </div>
+                        
+                       
                     </div>
                 </div>
             </div>
