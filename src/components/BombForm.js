@@ -2773,21 +2773,6 @@ const BombForm = ({ onBack }) => {
                     </div>
                 </form>
             </div>
-
-            {/* CSS para animaciones personalizadas */}
-            <style jsx>{`
-                @keyframes shimmer {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(100%); }
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-            `}</style>
         </div>
     );
 };
