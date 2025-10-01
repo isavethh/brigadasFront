@@ -2057,7 +2057,8 @@ const BombForm = ({ onBack }) => {
             )}
         </div>
     </div>
-)}
+)
+}
 
 {/* Sección de Logística CON CUSTOM */}
 {activeSection === 'logistics' && (
