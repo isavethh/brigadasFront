@@ -3,6 +3,7 @@ import Login from './components/Login';
 import BombForm from './components/BombForm';
 import AdminDashboard from './components/AdminDashboard';
 import { getCurrentUser, logout } from './services/auth';
+import alas from './images/alas.png';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -13,12 +14,14 @@ function App() {
         const currentUser = getCurrentUser();
         if (currentUser) {
             setUser(currentUser);
+            setView('admin'); // si hay usuario, ir a vista admin
         }
         setLoading(false);
     }, []);
 
     const handleLogin = (userData) => {
         setUser(userData);
+        setView('admin');
     };
 
     const handleLogout = () => {
@@ -47,7 +50,7 @@ function App() {
                     <div className="relative max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
                         <div className="flex items-center space-x-4">
                             <div className="w-12 h-10 bg-white/90 rounded-lg flex items-center justify-center">
-                                <img src="/images/alas.png" alt="logo" className="w-8 h-8 object-contain" />
+                                <img src={alas} alt="logo" className="w-8 h-8 object-contain" />
                             </div>
                             <h1 className="text-xl font-bold text-white">Sistema de Gestión de Brigadas</h1>
                         </div>
@@ -90,9 +93,9 @@ function App() {
             {/* Logo solo, sin fondo */}
             <div className="relative w-full py-6 flex justify-center">
                 <div className="group relative">
-                    <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                        <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
                         <img
-                            src="/images/alas.png"
+                            src={alas}
                             alt="Logo de la empresa"
                             className="max-w-full max-h-full object-contain"
                         />
