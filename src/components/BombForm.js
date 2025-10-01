@@ -975,24 +975,40 @@ const BombForm = ({ onBack }) => {
                         </div>
                     </div>
 
-                    {/* EPP Ropa resumen */}
+                    {/* EPP Ropa resumen (editable por tallas si hay cantidades) */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
                         <div className="flex justify-between items-center">
-                            <h3 className="font-semibold text-lg">👕 EPP - Ropa</h3>
+                            <h3 className="font-semibold text-lg">EPP - Ropa</h3>
                             <div className="text-sm text-gray-500">Items: {Object.keys(eppRopa || {}).length}</div>
                         </div>
                         <div className="mt-3 grid grid-cols-1 gap-2 text-sm">
                             {Object.entries(eppRopa).map(([item, data]) => {
                                 const total = ['xs','s','m','l','xl'].reduce((acc,k)=>acc + (Number(data[k])||0), 0);
                                 const hasObs = (data.observaciones||'').trim() !== '';
+                                if (total === 0 && !hasObs) return null;
                                 return (
-                                    <div key={item} className="flex items-center justify-between">
+                                    <div key={item} className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                                         <div className="flex items-center gap-3">
                                             <div className="font-medium">{item}</div>
-                                            {hasObs && <div className="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-800">¡Observación!</div>}
+                                            {hasObs && <div className="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-800">Observación</div>}
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <div className="text-sm text-gray-500">Total: <span className="font-semibold text-gray-800">{total}</span></div>
+                                            {['xs','s','m','l','xl'].some(k=>Number(data[k])>0) ? (
+                                                <div className="grid grid-cols-5 gap-2">
+                                                    {['xs','s','m','l','xl'].map(sizeKey => (
+                                                        <div key={sizeKey} className="flex flex-col items-center">
+                                                            <div className="text-xs text-gray-500">{sizeKey.toUpperCase()}</div>
+                                                            <NumberInput value={Number(data[sizeKey]||0)} onChange={(v)=> handleEppRopaSizeChange(item, sizeKey, v)} min={0} darkMode={darkMode} />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-2">
+                                                    <NumberInput value={total} onChange={(v)=> {
+                                                        handleEppRopaSizeChange(item, 'm', v);
+                                                    }} min={0} darkMode={darkMode} />
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -1003,14 +1019,23 @@ const BombForm = ({ onBack }) => {
                         </div>
                     </div>
 
-                    {/* Botas */}
+                    {/* Botas (tallas editables) */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
                         <div className="flex justify-between items-center">
-                            <h3 className="font-semibold text-lg">🥾 Botas</h3>
+                            <h3 className="font-semibold text-lg">Botas</h3>
                             <div className="text-sm text-gray-500">Tallas con cantidad: {Object.entries(botas || {}).filter(([k])=> !['observaciones','otratalla'].includes(k) && Number(botas[k])>0).length}</div>
                         </div>
                         <div className="mt-3 text-sm grid grid-cols-2 gap-2">
-                            {Object.entries(botas).map(([k,v]) => (k === 'observaciones' || k === 'otratalla') ? null : (v>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v}</div></div> : null))}
+                            {Object.entries(botas).map(([k,v]) => {
+                                if (k === 'observaciones' || k === 'otratalla') return null;
+                                if (Number(v) <= 0) return null;
+                                return (
+                                    <div key={k} className="flex items-center justify-between">
+                                        <div>{k}</div>
+                                        <NumberInput value={Number(v)} onChange={(val)=> handleBotasChange(k, val)} min={0} darkMode={darkMode} />
+                                    </div>
+                                );
+                            })}
                             {botas.otratalla ? <div className="col-span-2 text-sm">Otra talla: {botas.otratalla}</div> : null}
                             {botas.observaciones ? <div className="col-span-2 text-sm text-yellow-500">Obs: {botas.observaciones}</div> : null}
                         </div>
@@ -1019,15 +1044,25 @@ const BombForm = ({ onBack }) => {
                         </div>
                     </div>
 
-                    {/* Herramientas */}
+                    {/* Herramientas (editable) */}
                     <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'} shadow-sm`}> 
                         <div className="flex justify-between items-center">
-                            <h3 className="font-semibold text-lg">🛠️ Herramientas</h3>
+                            <h3 className="font-semibold text-lg">Herramientas</h3>
                             <div className="text-sm text-gray-500">Items con cantidad: {Object.values(herramientas || {}).filter(v => v.cantidad>0).length + herramientasCustom.length}</div>
                         </div>
-                        <div className="mt-3 text-sm space-y-1">
-                            {Object.entries(herramientas).map(([k,v]) => v.cantidad>0 ? <div key={k} className="flex justify-between"><div>{k}</div><div className="font-medium">{v.cantidad}</div></div> : null)}
-                            {herramientasCustom.map((c,i) => <div key={`hc-${i}`} className="flex justify-between"><div>{c.item}</div><div className="font-medium">{c.cantidad}</div></div>)}
+                        <div className="mt-3 text-sm space-y-2">
+                            {Object.entries(herramientas).map(([k,v]) => v.cantidad>0 ? (
+                                <div key={k} className="flex items-center justify-between">
+                                    <div>{k}</div>
+                                    <NumberInput value={Number(v.cantidad)} onChange={(val)=> setHerramientas(prev=> ({...prev, [k]: {...prev[k], cantidad: val}}))} min={0} darkMode={darkMode} />
+                                </div>
+                            ) : null)}
+                            {herramientasCustom.map((c,i) => (
+                                <div key={`hc-${i}`} className="flex items-center justify-between">
+                                    <div>{c.item}</div>
+                                    <NumberInput value={Number(c.cantidad)} onChange={(val)=> setHerramientasCustom(prev=> prev.map((r,idx)=> idx===i? {...r, cantidad: val} : r))} min={0} darkMode={darkMode} />
+                                </div>
+                            ))}
                         </div>
                         <div className="mt-3 text-right">
                             <button onClick={() => { setActiveSection('tools'); window.scrollTo({top:0, behavior:'smooth'}); }} className="text-sm text-blue-600">Editar Herramientas</button>
