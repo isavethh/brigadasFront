@@ -144,56 +144,10 @@ function App() {
         );
     }
 
-    // Si el usuario es encargado, mostrar panel de administración
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {/* Header con logo y gradiente hermoso */}
-            <header className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 shadow-xl relative overflow-hidden">
-                {/* Elementos decorativos */}
-                <div className="absolute inset-0">
-                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-                    <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-                </div>
-
-                <div className="relative max-w-7xl mx-auto px-6 py-6">
-                    {/* Contenedor del logo con animación */}
-                    <div className="flex justify-center mb-6">
-                        <div className="group relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-yellow-100/50 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-                            <div className="relative w-28 h-20 bg-gradient-to-r from-white/95 to-yellow-50/95 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all duration-300 border border-white/30">
-                                <img 
-                                    src="/path/to/your/logo.png" 
-                                    alt="Logo de la empresa" 
-                                    className="max-w-full max-h-full object-contain"
-                                />
-                                {/* Placeholder mientras no tengas el logo */}
-                                <span className="text-slate-700 font-bold text-sm">LOGO</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-2xl font-bold text-white drop-shadow-lg">Sistema de Gestión de Brigadas</h1>
-                        <div className="flex items-center space-x-6">
-                            <div className="text-white/90 bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm">
-                                <span className="font-medium">{user.username}</span>
-                                <span className="text-white/70 ml-2">({user.role})</span>
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="group bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-medium"
-                            >
-                                <span className="group-hover:mr-2 transition-all duration-300">Cerrar Sesión</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <main className="max-w-7xl mx-auto py-8 px-6">
-                {user.role === 'encargado' && <AdminDashboard />}
-            </main>
-        </div>
-    );
+    // Si el usuario está logueado, mostrar el dashboard de administrador
+    return <AdminDashboard onBack={() => {
+        handleLogout();
+        setView('landing');
+    }} />;
 
 export default App;
