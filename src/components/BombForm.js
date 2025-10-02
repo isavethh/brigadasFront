@@ -2323,14 +2323,14 @@ const BombForm = ({ onBack }) => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
-            {EQUIPO_CAMPO_ITEMS.map(item => (
+            {CAMPO_ITEMS.map(item => (
                 <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
                     <label className="text-sm font-medium block">{item}</label>
                     <div className="space-y-3">
                         <div className="flex justify-start">
                             <NumberInput
-                                value={equipoCampo[item].cantidad}
-                                onChange={(value) => handleListQuantityChange(setEquipoCampo)(item, value)}
+                                value={logisticaCampo[item].cantidad}
+                                onChange={(value) => handleListQuantityChange(setLogisticaCampo)(item, value)}
                                 min={0}
                                 darkMode={darkMode}
                             />
@@ -2341,8 +2341,8 @@ const BombForm = ({ onBack }) => {
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
-                            value={equipoCampo[item].observaciones}
-                            onChange={(e) => handleListObsChange(setEquipoCampo)(item, e.target.value)}
+                            value={logisticaCampo[item].observaciones}
+                            onChange={(e) => handleListObsChange(setLogisticaCampo)(item, e.target.value)}
                             maxLength={400}
                         />
                     </div>
@@ -2359,31 +2359,31 @@ const BombForm = ({ onBack }) => {
                     className={`rounded-md border px-3 py-1 text-sm ${
                         darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                     }`}
-                    onClick={() => setEquipoCampoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
+                    onClick={() => setLogisticaCampoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                 >
                     Añadir otro
                 </button>
             </div>
             
-            {equipoCampoCustom.length === 0 ? (
+            {logisticaCampoCustom.length === 0 ? (
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     No hay ítems personalizados aún.
                 </p>
             ) : (
                 <div className="space-y-3">
-                    {equipoCampoCustom.map((row, idx) => (
+                    {logisticaCampoCustom.map((row, idx) => (
                         <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                             <input
                                 type="text"
                                 className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Nombre del ítem"
                                 value={row.item}
-                                onChange={(e) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
+                                onChange={(e) => setLogisticaCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                             />
                             <div className="flex justify-start">
                                 <NumberInput
                                     value={row.cantidad}
-                                    onChange={(value) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                    onChange={(value) => setLogisticaCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
                                     min={0}
                                     darkMode={darkMode}
                                 />
@@ -2393,14 +2393,14 @@ const BombForm = ({ onBack }) => {
                                 className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Observaciones"
                                 value={row.observaciones}
-                                onChange={(e) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
+                                onChange={(e) => setLogisticaCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                             />
                             <button
                                 type="button"
                                 className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
                                     darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={() => setEquipoCampoCustom(prev => prev.filter((_, i) => i !== idx))}
+                                onClick={() => setLogisticaCampoCustom(prev => prev.filter((_, i) => i !== idx))}
                             >
                                 Quitar
                             </button>
@@ -2411,7 +2411,6 @@ const BombForm = ({ onBack }) => {
         </div>
     </div>
 )}
-
 
 {/* Sección de Limpieza e Higiene CON CUSTOM */}
 {activeSection === 'hygiene' && (
