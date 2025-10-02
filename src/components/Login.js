@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { login } from '../services/auth';
+import alas from '../images/alas2.png';
 
 const Login = ({ onLogin, onBack }) => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -33,16 +34,13 @@ const Login = ({ onLogin, onBack }) => {
             </div>
 
             {/* 📱 LOGO RESPONSIVE */}
-            <div className="relative w-full py-4 sm:py-6 flex justify-center">
+            <div className="relative w-full py-6 sm:py-8 flex justify-center">
                 <div className="group relative">
-                    <div className="w-24 sm:w-32 h-12 sm:h-16 bg-white/95 rounded-lg sm:rounded-xl flex items-center justify-center shadow-xl sm:shadow-2xl transform group-hover:scale-105 transition-all duration-500">
-                        <img 
-                            src="/path/to/your/logo.png" 
-                            alt="Logo de la empresa" 
-                            className="max-w-full max-h-full object-contain"
-                        />
-                        <span className="text-slate-700 font-bold text-sm sm:text-base tracking-wide">LOGO</span>
-                    </div>
+                    <img 
+                        src={alas} 
+                        alt="Logo" 
+                        className="w-24 sm:w-40 h-24 sm:h-40 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
+                    />
                 </div>
             </div>
 
