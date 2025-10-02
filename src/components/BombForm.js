@@ -1422,7 +1422,7 @@ const BombForm = ({ onBack }) => {
                     <div className="p-4 sm:p-8"
 >
                         {/* Mostrar resumen si está finalizado */}
-                        {submitStatus.isFinal && isSummarySection ? (
+                        {submitStatus.isFinal && activeSection === 'summary' ? (
                             <>
                                 <div className={`mb-8 rounded-xl p-6 border-2 ${
                                     submitStatus.success
