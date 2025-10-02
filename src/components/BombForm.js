@@ -2314,39 +2314,35 @@ const BombForm = ({ onBack }) => {
     </div>
 )}
 
-
 {/* Sección de Equipo de Campo CON CUSTOM */}
-{activeSection === 'camp' && (
+{activeSection === 'field' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">
-                Equipo de Campo
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Equipos necesarios para operaciones en terreno
-            </p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">Equipo de Campo</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">Equipamiento especializado para operaciones de campo</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
-            {CAMPO_ITEMS.map(item => (
-                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}>
-                    <label className="text-sm font-medium">{item}</label>
-                    <div className="flex items-center space-x-2">
-                        <NumberInput
-                            value={logisticaCampo[item].cantidad}
-                            onChange={(value) => handleListQuantityChange(setLogisticaCampo)(item, value)}
-                            min="0"
-                            darkMode={darkMode}
-                        />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+            {EQUIPO_CAMPO_ITEMS.map(item => (
+                <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                    <label className="text-sm font-medium block">{item}</label>
+                    <div className="space-y-3">
+                        <div className="flex justify-start">
+                            <NumberInput
+                                value={equipoCampo[item].cantidad}
+                                onChange={(value) => handleListQuantityChange(setEquipoCampo)(item, value)}
+                                min={0}
+                                darkMode={darkMode}
+                            />
+                        </div>
                         <input
                             type="text"
-                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                            className={`w-full px-3 py-2 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
-                            value={logisticaCampo[item].observaciones}
-                            onChange={(e) => handleListObsChange(setLogisticaCampo)(item, e.target.value)}
+                            value={equipoCampo[item].observaciones}
+                            onChange={(e) => handleListObsChange(setEquipoCampo)(item, e.target.value)}
                             maxLength={400}
                         />
                     </div>
@@ -2354,60 +2350,57 @@ const BombForm = ({ onBack }) => {
             ))}
         </div>
 
-        {/* Campo - Otros */}
+        {/* Equipo de Campo - Otros */}
         <div className={`${cardBg} p-4 rounded-lg border ${borderColor}`}>
             <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold">Otros</h3>
                 <button
                     type="button"
                     className={`rounded-md border px-3 py-1 text-sm ${
-                        darkMode
-                            ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                            : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                        darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                     }`}
-                    onClick={() => setLogisticaCampoCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                    onClick={() => setEquipoCampoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                 >
                     Añadir otro
                 </button>
             </div>
-            {logisticaCampoCustom.length === 0 ? (
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+            
+            {equipoCampoCustom.length === 0 ? (
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    No hay ítems personalizados aún.
+                </p>
             ) : (
                 <div className="space-y-3">
-                    {logisticaCampoCustom.map((row, idx) => (
-                        <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                    {equipoCampoCustom.map((row, idx) => (
+                        <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Nombre"
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                placeholder="Nombre del ítem"
                                 value={row.item}
-                                onChange={(e)=> setLogisticaCampoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                onChange={(e) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                             />
-                            <NumberInput
-                                value={row.cantidad}
-                                onChange={(value) => setLogisticaCampoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={row.cantidad}
+                                    onChange={(value) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded col-span-1 ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Observaciones"
                                 value={row.observaciones}
-                                onChange={(e)=> setLogisticaCampoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                onChange={(e) => setEquipoCampoCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                             />
                             <button
                                 type="button"
-                                className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                    darkMode
-                                        ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                        : 'border-red-700 text-red-700 hover:bg-red-100'
+                                className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                    darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={()=> setLogisticaCampoCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                onClick={() => setEquipoCampoCustom(prev => prev.filter((_, i) => i !== idx))}
                             >
                                 Quitar
                             </button>
@@ -2419,53 +2412,40 @@ const BombForm = ({ onBack }) => {
     </div>
 )}
 
-{/* Sección Limpieza CON TOALLAS FEMENINAS Y CUSTOM */}
+
+{/* Sección de Limpieza e Higiene CON CUSTOM */}
 {activeSection === 'hygiene' && (
-    <div className="space-y-10">
+    <div className="space-y-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">
-                Limpieza e Higiene
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Productos de limpieza personal y general
-            </p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Limpieza e Higiene</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">Productos para mantenimiento de higiene personal y general</p>
         </div>
 
         {/* Limpieza Personal */}
         <div className="space-y-6">
-            <h3 className={`text-xl font-semibold border-l-4 pl-3 py-1 ${
-                darkMode ? 'border-teal-400' : 'border-teal-600'
-            }`}>Limpieza Personal</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
+            <h3 className="text-lg font-semibold">Limpieza Personal</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
                 {LIMPIEZA_PERSONAL_ITEMS.map(item => (
-                    <div key={item} className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-300 hover:shadow-lg ${
-                        item === 'Toallas Femeninas' 
-                            ? 'bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-pink-200 dark:border-pink-800'
-                            : `${cardBg} ${borderColor}`
-                    }`}>
-                        <label className={`text-sm font-medium ${
-                            item === 'Toallas Femeninas' ? 'text-pink-800 dark:text-pink-200 font-bold' : ''
-                        }`}>
-                            {item}
-                            {item === 'Toallas Femeninas' && <span className="ml-2">🩸</span>}
-                        </label>
-                        <div className="flex items-center space-x-2">
-                            <NumberInput
-                                value={limpiezaPersonal[item].cantidad}
-                                onChange={(value) => handleListQuantityChange(setLimpiezaPersonal)(item, value)}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                    <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                        <label className="text-sm font-medium block">{item}</label>
+                        <div className="space-y-3">
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={limpiezaPersonal[item].cantidad}
+                                    onChange={(value) => handleListQuantityChange(setLimpiezaPersonal)(item, value)}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                                className={`w-40 px-2 py-1 border rounded text-sm ${
+                                className={`w-full px-3 py-2 border rounded text-sm ${
                                     darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                                 }`}
                                 placeholder="Observaciones"
                                 value={limpiezaPersonal[item].observaciones}
-                                maxLength={400}
                                 onChange={(e) => handleListObsChange(setLimpiezaPersonal)(item, e.target.value)}
+                                maxLength={400}
                             />
                         </div>
                     </div>
@@ -2475,57 +2455,54 @@ const BombForm = ({ onBack }) => {
             {/* Limpieza Personal - Otros */}
             <div className={`${cardBg} p-4 rounded-lg border ${borderColor}`}>
                 <div className="mb-3 flex items-center justify-between">
-                    <h3 className="font-semibold">Otros</h3>
+                    <h4 className="font-semibold">Otros (Personal)</h4>
                     <button
                         type="button"
                         className={`rounded-md border px-3 py-1 text-sm ${
-                            darkMode
-                                ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                                : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                            darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                         }`}
-                        onClick={() => setLimpiezaPersonalCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                        onClick={() => setLimpiezaPersonalCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                     >
                         Añadir otro
                     </button>
                 </div>
+                
                 {limpiezaPersonalCustom.length === 0 ? (
-                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        No hay ítems personalizados aún.
+                    </p>
                 ) : (
                     <div className="space-y-3">
                         {limpiezaPersonalCustom.map((row, idx) => (
-                            <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                            <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                                 <input
                                     type="text"
-                                    className={`px-2 py-1 border rounded ${
-                                        darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                    }`}
-                                    placeholder="Nombre"
+                                    className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                    placeholder="Nombre del ítem"
                                     value={row.item}
-                                    onChange={(e)=> setLimpiezaPersonalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                    onChange={(e) => setLimpiezaPersonalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                                 />
-                                <NumberInput
-                                    value={row.cantidad}
-                                    onChange={(value) => setLimpiezaPersonalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                    min="0"
-                                    darkMode={darkMode}
-                                />
+                                <div className="flex justify-start">
+                                    <NumberInput
+                                        value={row.cantidad}
+                                        onChange={(value) => setLimpiezaPersonalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                        min={0}
+                                        darkMode={darkMode}
+                                    />
+                                </div>
                                 <input
                                     type="text"
-                                    className={`px-2 py-1 border rounded col-span-1 ${
-                                        darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                    }`}
+                                    className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                     placeholder="Observaciones"
                                     value={row.observaciones}
-                                    onChange={(e)=> setLimpiezaPersonalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                    onChange={(e) => setLimpiezaPersonalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                                 />
                                 <button
                                     type="button"
-                                    className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                        darkMode
-                                            ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                            : 'border-red-700 text-red-700 hover:bg-red-100'
+                                    className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                        darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                     }`}
-                                    onClick={()=> setLimpiezaPersonalCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                    onClick={() => setLimpiezaPersonalCustom(prev => prev.filter((_, i) => i !== idx))}
                                 >
                                     Quitar
                                 </button>
@@ -2538,31 +2515,29 @@ const BombForm = ({ onBack }) => {
 
         {/* Limpieza General */}
         <div className="space-y-6">
-            <h3 className={`text-xl font-semibold border-l-4 pl-3 py-1 ${
-                darkMode ? 'border-teal-400' : 'border-teal-600'
-            }`}>Limpieza General</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
+            <h3 className="text-lg font-semibold">Limpieza General</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
                 {LIMPIEZA_GENERAL_ITEMS.map(item => (
-                    <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                        <label className="text-sm font-medium">{item}</label>
-                        <div className="flex items-center space-x-2">
-                            <NumberInput
-                                value={limpiezaGeneral[item].cantidad}
-                                onChange={(value) => handleListQuantityChange(setLimpiezaGeneral)(item, value)}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                    <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                        <label className="text-sm font-medium block">{item}</label>
+                        <div className="space-y-3">
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={limpiezaGeneral[item].cantidad}
+                                    onChange={(value) => handleListQuantityChange(setLimpiezaGeneral)(item, value)}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                               className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                                className={`w-full px-3 py-2 border rounded text-sm ${
                                     darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                                 }`}
                                 placeholder="Observaciones"
                                 value={limpiezaGeneral[item].observaciones}
-                                maxLength={400}
                                 onChange={(e) => handleListObsChange(setLimpiezaGeneral)(item, e.target.value)}
+                                maxLength={400}
                             />
                         </div>
                     </div>
@@ -2572,57 +2547,54 @@ const BombForm = ({ onBack }) => {
             {/* Limpieza General - Otros */}
             <div className={`${cardBg} p-4 rounded-lg border ${borderColor}`}>
                 <div className="mb-3 flex items-center justify-between">
-                    <h3 className="font-semibold">Otros</h3>
+                    <h4 className="font-semibold">Otros (General)</h4>
                     <button
                         type="button"
                         className={`rounded-md border px-3 py-1 text-sm ${
-                            darkMode
-                                ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                                : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                            darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                         }`}
-                        onClick={() => setLimpiezaGeneralCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                        onClick={() => setLimpiezaGeneralCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                     >
                         Añadir otro
                     </button>
                 </div>
+                
                 {limpiezaGeneralCustom.length === 0 ? (
-                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        No hay ítems personalizados aún.
+                    </p>
                 ) : (
                     <div className="space-y-3">
                         {limpiezaGeneralCustom.map((row, idx) => (
-                            <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                            <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                                 <input
                                     type="text"
-                                    className={`px-2 py-1 border rounded ${
-                                        darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                    }`}
-                                    placeholder="Nombre"
+                                    className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                    placeholder="Nombre del ítem"
                                     value={row.item}
-                                    onChange={(e)=> setLimpiezaGeneralCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                    onChange={(e) => setLimpiezaGeneralCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                                 />
-                                <NumberInput
-                                    value={row.cantidad}
-                                    onChange={(value) => setLimpiezaGeneralCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                    min="0"
-                                    darkMode={darkMode}
-                                />
+                                <div className="flex justify-start">
+                                    <NumberInput
+                                        value={row.cantidad}
+                                        onChange={(value) => setLimpiezaGeneralCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                        min={0}
+                                        darkMode={darkMode}
+                                    />
+                                </div>
                                 <input
                                     type="text"
-                                    className={`px-2 py-1 border rounded col-span-1 ${
-                                        darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                    }`}
+                                    className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                     placeholder="Observaciones"
                                     value={row.observaciones}
-                                    onChange={(e)=> setLimpiezaGeneralCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                    onChange={(e) => setLimpiezaGeneralCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                                 />
                                 <button
                                     type="button"
-                                    className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                        darkMode
-                                            ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                            : 'border-red-700 text-red-700 hover:bg-red-100'
+                                    className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                        darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                     }`}
-                                    onClick={()=> setLimpiezaGeneralCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                    onClick={() => setLimpiezaGeneralCustom(prev => prev.filter((_, i) => i !== idx))}
                                 >
                                     Quitar
                                 </button>
@@ -2635,40 +2607,37 @@ const BombForm = ({ onBack }) => {
     </div>
 )}
 
+
 {/* Sección de Medicamentos CON CUSTOM */}
-{activeSection === 'meds' && (
+{activeSection === 'medical' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4">
-                Medicamentos
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Suministros médicos y medicamentos esenciales
-            </p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent mb-4">Medicamentos</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">Medicamentos y suministros médicos para emergencias</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
             {MEDICAMENTOS_ITEMS.map(item => (
-                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                    <label className="text-sm font-medium">{item}</label>
-                    <div className="flex items-center space-x-2">
-                        <NumberInput
-                            value={medicamentos[item].cantidad}
-                            onChange={(value) => handleListQuantityChange(setMedicamentos)(item, value)}
-                            min="0"
-                            darkMode={darkMode}
-                        />
+                <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                    <label className="text-sm font-medium block">{item}</label>
+                    <div className="space-y-3">
+                        <div className="flex justify-start">
+                            <NumberInput
+                                value={medicamentos[item].cantidad}
+                                onChange={(value) => handleListQuantityChange(setMedicamentos)(item, value)}
+                                min={0}
+                                darkMode={darkMode}
+                            />
+                        </div>
                         <input
                             type="text"
-                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                            className={`w-full px-3 py-2 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
                             value={medicamentos[item].observaciones}
-                            maxLength={400}
                             onChange={(e) => handleListObsChange(setMedicamentos)(item, e.target.value)}
+                            maxLength={400}
                         />
                     </div>
                 </div>
@@ -2682,53 +2651,50 @@ const BombForm = ({ onBack }) => {
                 <button
                     type="button"
                     className={`rounded-md border px-3 py-1 text-sm ${
-                        darkMode
-                            ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                            : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                        darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                     }`}
-                    onClick={() => setMedicamentosCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                    onClick={() => setMedicamentosCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                 >
                     Añadir otro
                 </button>
             </div>
+            
             {medicamentosCustom.length === 0 ? (
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    No hay ítems personalizados aún.
+                </p>
             ) : (
                 <div className="space-y-3">
                     {medicamentosCustom.map((row, idx) => (
-                        <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                        <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Nombre"
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                placeholder="Nombre del ítem"
                                 value={row.item}
-                                onChange={(e)=> setMedicamentosCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                onChange={(e) => setMedicamentosCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                             />
-                            <NumberInput
-                                value={row.cantidad}
-                                onChange={(value) => setMedicamentosCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={row.cantidad}
+                                    onChange={(value) => setMedicamentosCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded col-span-1 ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Observaciones"
                                 value={row.observaciones}
-                                onChange={(e)=> setMedicamentosCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                onChange={(e) => setMedicamentosCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                             />
                             <button
                                 type="button"
-                                className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                    darkMode
-                                        ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                        : 'border-red-700 text-red-700 hover:bg-red-100'
+                                className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                    darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={()=> setMedicamentosCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                onClick={() => setMedicamentosCustom(prev => prev.filter((_, i) => i !== idx))}
                             >
                                 Quitar
                             </button>
@@ -2740,40 +2706,37 @@ const BombForm = ({ onBack }) => {
     </div>
 )}
 
+
 {/* Sección de Rescate Animal CON CUSTOM */}
-{activeSection === 'animals' && (
+{activeSection === 'rescue' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
-                Rescate Animal
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Equipos y suministros para rescate de animales
-            </p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">Rescate Animal</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">Suministros para rescate y cuidado de animales</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
             {RESCATE_ANIMAL_ITEMS.map(item => (
-                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                    <label className="text-sm font-medium">{item}</label>
-                    <div className="flex items-center space-x-2">
-                        <NumberInput
-                            value={rescateAnimal[item].cantidad}
-                            onChange={(value) => handleListQuantityChange(setRescateAnimal)(item, value)}
-                            min="0"
-                            darkMode={darkMode}
-                        />
+                <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                    <label className="text-sm font-medium block">{item}</label>
+                    <div className="space-y-3">
+                        <div className="flex justify-start">
+                            <NumberInput
+                                value={rescateAnimal[item].cantidad}
+                                onChange={(value) => handleListQuantityChange(setRescateAnimal)(item, value)}
+                                min={0}
+                                darkMode={darkMode}
+                            />
+                        </div>
                         <input
                             type="text"
-                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                            className={`w-full px-3 py-2 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
                             value={rescateAnimal[item].observaciones}
-                            maxLength={400}
                             onChange={(e) => handleListObsChange(setRescateAnimal)(item, e.target.value)}
+                            maxLength={400}
                         />
                     </div>
                 </div>
@@ -2787,53 +2750,50 @@ const BombForm = ({ onBack }) => {
                 <button
                     type="button"
                     className={`rounded-md border px-3 py-1 text-sm ${
-                        darkMode
-                            ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                            : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                        darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                     }`}
-                    onClick={() => setRescateAnimalCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                    onClick={() => setRescateAnimalCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                 >
                     Añadir otro
                 </button>
             </div>
+            
             {rescateAnimalCustom.length === 0 ? (
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    No hay ítems personalizados aún.
+                </p>
             ) : (
                 <div className="space-y-3">
                     {rescateAnimalCustom.map((row, idx) => (
-                        <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                        <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Nombre"
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                placeholder="Nombre del ítem"
                                 value={row.item}
-                                onChange={(e)=> setRescateAnimalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                onChange={(e) => setRescateAnimalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                             />
-                            <NumberInput
-                                value={row.cantidad}
-                                onChange={(value) => setRescateAnimalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={row.cantidad}
+                                    onChange={(value) => setRescateAnimalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded col-span-1 ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Observaciones"
                                 value={row.observaciones}
-                                onChange={(e)=> setRescateAnimalCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                onChange={(e) => setRescateAnimalCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                             />
                             <button
                                 type="button"
-                                className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                    darkMode
-                                        ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                        : 'border-red-700 text-red-700 hover:bg-red-100'
+                                className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                    darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={() => setRescateAnimalCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                onClick={() => setRescateAnimalCustom(prev => prev.filter((_, i) => i !== idx))}
                             >
                                 Quitar
                             </button>
@@ -2841,10 +2801,10 @@ const BombForm = ({ onBack }) => {
                     ))}
                 </div>
             )}
-
         </div>
     </div>
 )}
+        
 
                 {/* Navegación inferior */}
                 {renderNavigation()}
