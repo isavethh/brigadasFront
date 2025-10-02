@@ -1211,8 +1211,8 @@ const BombForm = ({ onBack }) => {
                             }`}
                             aria-label="Anterior"
                         >
-                            <div className="flex items-center">
-                                <span className="text-lg mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
+                            <div className="flex items-center justify-center">
+                                <span className="text-2xl leading-none sm:mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
                                 <span className="hidden sm:inline">Anterior</span>
                             </div>
                         </button>
@@ -1239,31 +1239,33 @@ const BombForm = ({ onBack }) => {
                             }`}
                             aria-label={isLastSection ? 'Finalizar' : 'Siguiente'}
                         >
-                            {isLastSection
-                                ? (isSubmitting ? (
+                            {isLastSection ? (
+                                isSubmitting ? (
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Finalizando...</span>
-                                        <span className="sm:hidden">⤓</span>
+                                        <span className="sm:hidden text-2xl leading-none">⤓</span>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center">
+                                    <div className="flex items-center justify-center">
                                         <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
-                                        <span className="text-xl sm:hidden">→</span>
+                                        <span className="text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
                                     </div>
-                                ))
-                                : (isSubmitting ? (
+                                )
+                            ) : (
+                                isSubmitting ? (
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Guardando...</span>
-                                        <span className="sm:hidden">…</span>
+                                        <span className="sm:hidden text-2xl leading-none">…</span>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center">
+                                    <div className="flex items-center justify-center">
                                         <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Siguiente</span>
-                                        <span className="text-lg sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
+                                        <span className="text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
                                     </div>
-                                ))}
+                                )
+                            )}
                         </button>
                     </div>
                 </div>
