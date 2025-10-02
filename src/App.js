@@ -3,7 +3,7 @@ import Login from './components/Login';
 import BombForm from './components/BombForm';
 import AdminDashboard from './components/AdminDashboard';
 import { getCurrentUser, logout } from './services/auth';
-import alas from './images/alas.png';
+import alas from './images/alas2.png';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -98,7 +98,7 @@ function App() {
           />
         </div>
       </div>
-      
+
       <div className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in">
         <div className="text-center mb-8 sm:mb-16 animate-slide-up">
           <h1 className="text-3xl sm:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 bg-clip-text text-transparent animate-gradient-x leading-tight pb-2">
