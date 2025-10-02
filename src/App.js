@@ -89,15 +89,16 @@ function App() {
       </div>
 
       {/* Logo styled */}
-      <div className="relative w-full py-4 sm:py-6 flex justify-center">
+      <div className="relative w-full py-6 sm:py-8 flex justify-center">
         <div className="group relative">
           <img 
             src={alas} 
             alt="Logo" 
-            className="w-16 sm:w-24 h-16 sm:h-24 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
+            className="w-24 sm:w-40 h-24 sm:h-40 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
           />
         </div>
       </div>
+
 
       <div className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in">
         <div className="text-center mb-8 sm:mb-16 animate-slide-up">
