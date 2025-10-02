@@ -1192,77 +1192,85 @@ const BombForm = ({ onBack }) => {
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-between gap-4">
-                    {/* Prev (left) */}
-                    <div className="flex items-center justify-start">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (currentIndex > 0) {
-                                    setActiveSection(SECTIONS[currentIndex - 1].id);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                }
-                            }}
-                            disabled={currentIndex === 0}
-                            className={`group flex items-center justify-center px-4 sm:px-6 py-3 h-12 rounded-xl transition-all duration-300 ${
-                                currentIndex === 0
-                                    ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
-                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 hover:scale-105'
-                            }`}
-                            aria-label="Anterior"
-                        >
-                            <div className="flex items-center justify-center gap-2">
-                                <svg className="h-5 w-5 text-current sm:mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                    <path d="M9 6l6 6-6 6" transform="rotate(180 12 12)" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                                <span className="hidden sm:inline">Anterior</span>
-                            </div>
-                        </button>
-                    </div>
+                {/* CAMBIO PRINCIPAL: Usar flex-row siempre en lugar de flex-col md:flex-row */}
+                <div className="flex flex-row justify-between items-center gap-2">
+                    {/* Botón Anterior (izquierda) */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (currentIndex > 0) {
+                                setActiveSection(SECTIONS[currentIndex - 1].id);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        }}
+                        disabled={currentIndex === 0}
+                        className={`group flex items-center justify-center px-3 sm:px-6 py-3 h-12 rounded-xl transition-all duration-300 ${
+                            currentIndex === 0
+                                ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 hover:scale-105'
+                        }`}
+                        aria-label="Anterior"
+                    >
+                        <div className="flex items-center justify-center gap-1">
+                            <svg className="h-5 w-5 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                <path d="M9 6l6 6-6 6" transform="rotate(180 12 12)" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="hidden sm:inline">Anterior</span>
+                        </div>
+                    </button>
 
-                    {/* Right side: optional message + Next/Finish */}
-                    <div className="flex items-center justify-end gap-4">
-                        {submitStatus.message && !submitStatus.isFinal && (
-                            <div className={`px-4 py-3 rounded-xl font-medium ${
-                                submitStatus.success 
-                                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800' 
-                                    : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
-                            } animate-pulse`}>
-                                {submitStatus.message}
+                    {/* Mensaje de estado (centro) - Solo visible en pantallas grandes */}
+                    {submitStatus.message && !submitStatus.isFinal && (
+                        <div className={`hidden md:flex px-4 py-3 rounded-xl font-medium ${
+                            submitStatus.success 
+                                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800' 
+                                : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                        } animate-pulse`}>
+                            {submitStatus.message}
+                        </div>
+                    )}
+
+                    {/* Botón Siguiente/Finalizar (derecha) */}
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={`group flex items-center justify-center px-3 sm:px-6 py-3 h-12 rounded-xl text-white transition-all duration-300 ${
+                            isSubmitting
+                                ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 hover:shadow-lg hover:shadow-amber-500/25'
+                        }`}
+                        aria-label={isLastSection ? 'Finalizar' : 'Siguiente'}
+                    >
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center gap-1">
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <span className="hidden sm:inline">{isLastSection ? 'Finalizando...' : 'Guardando...'}</span>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-center gap-1">
+                                <span className="hidden sm:inline">{isLastSection ? 'Finalizar' : 'Siguiente'}</span>
+                                <svg className="h-5 w-5 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                    <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
                             </div>
                         )}
-
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className={`group flex items-center justify-center px-4 sm:px-6 py-3 h-12 rounded-xl text-white transition-all duration-300 ${
-                                isSubmitting
-                                    ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 hover:shadow-lg hover:shadow-amber-500/25'
-                            }`}
-                            aria-label={isLastSection ? 'Finalizar' : 'Siguiente'}
-                        >
-                            {/* Inner layout identical to Prev: icon + label (label hidden on mobile) */}
-                            {isSubmitting ? (
-                                <div className="flex items-center justify-center gap-2">
-                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    <span className="hidden sm:inline">{isLastSection ? 'Finalizando...' : 'Guardando...'}</span>
-                                    <span className="sm:hidden text-lg">…</span>
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-center gap-2">
-                                    <span className="hidden sm:inline">{isLastSection ? 'Finalizar' : 'Siguiente'}</span>
-                                    <svg className="h-5 w-5 text-current sm:ml-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                        <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
-                            )}
-                        </button>
-                    </div>
+                    </button>
                 </div>
+
+                {/* Mensaje de estado para móvil - Debajo de los botones */}
+                {submitStatus.message && !submitStatus.isFinal && (
+                    <div className={`md:hidden px-4 py-3 rounded-xl font-medium text-center ${
+                        submitStatus.success 
+                            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800' 
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                    } animate-pulse`}>
+                        {submitStatus.message}
+                    </div>
+                )}
             </div>
         );
     };
+
 
     // Estilos dinámicos para modo oscuro con colores amarillos
     const bgColor = darkMode ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900' : 'bg-gradient-to-br from-amber-50 via-white to-orange-50';
