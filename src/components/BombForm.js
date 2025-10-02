@@ -1213,7 +1213,7 @@ const BombForm = ({ onBack }) => {
                         >
                             <div className="flex items-center justify-center">
                                 <svg className="h-6 w-6 sm:mr-2 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                    <path d="M15 6L9 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M9 6l6 6-6 6" transform="rotate(180 12 12)" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 <span className="hidden sm:inline">Anterior</span>
                             </div>
