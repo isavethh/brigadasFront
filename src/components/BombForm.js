@@ -1212,8 +1212,8 @@ const BombForm = ({ onBack }) => {
                             aria-label="Anterior"
                         >
                             <div className="flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                <svg className="h-6 w-6 sm:mr-2 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                    <path d="M15 6L9 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 <span className="hidden sm:inline">Anterior</span>
                             </div>
@@ -1246,15 +1246,15 @@ const BombForm = ({ onBack }) => {
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Finalizando...</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M19 12l-7 7-7-7" />
+                                        <svg className="h-6 w-6 sm:hidden text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                            <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center">
                                         <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        <svg className="h-6 w-6 text-current sm:hidden transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                            <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
                                 )
@@ -1263,11 +1263,7 @@ const BombForm = ({ onBack }) => {
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Guardando...</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:hidden" viewBox="0 0 24 24" fill="currentColor">
-                                            <circle cx="6" cy="12" r="1.5" />
-                                            <circle cx="12" cy="12" r="1.5" />
-                                            <circle cx="18" cy="12" r="1.5" />
-                                        </svg>
+                                        <span className="sm:hidden text-2xl leading-none">…</span>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center">
