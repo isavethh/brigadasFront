@@ -1212,7 +1212,9 @@ const BombForm = ({ onBack }) => {
                             aria-label="Anterior"
                         >
                             <div className="flex items-center justify-center">
-                                <span className="text-2xl leading-none sm:mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
                                 <span className="hidden sm:inline">Anterior</span>
                             </div>
                         </button>
@@ -1244,12 +1246,16 @@ const BombForm = ({ onBack }) => {
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Finalizando...</span>
-                                        <span className="sm:hidden text-2xl leading-none">⤓</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M19 12l-7 7-7-7" />
+                                        </svg>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center">
                                         <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
-                                        <span className="text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
                                     </div>
                                 )
                             ) : (
@@ -1257,7 +1263,11 @@ const BombForm = ({ onBack }) => {
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                                         <span className="hidden sm:inline">Guardando...</span>
-                                        <span className="sm:hidden text-2xl leading-none">…</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:hidden" viewBox="0 0 24 24" fill="currentColor">
+                                            <circle cx="6" cy="12" r="1.5" />
+                                            <circle cx="12" cy="12" r="1.5" />
+                                            <circle cx="18" cy="12" r="1.5" />
+                                        </svg>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center">
