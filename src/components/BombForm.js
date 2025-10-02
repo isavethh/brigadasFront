@@ -1870,23 +1870,34 @@ const BombForm = ({ onBack }) => {
                                                 darkMode ? 'border-purple-400' : 'border-purple-600'
                                             }`}>EPP - Equipo</h2>
                                             
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
-                                                {EPP_EQUIPO_ITEMS.map(item => (
-                                                    <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                                                        <label className="text-sm font-medium">{item}</label>
-                                                        <div className="flex items-center space-x-2">
-                                                            <NumberInput
-                                                                value={eppEquipo[item].cantidad}
-                                                                onChange={(value) => handleListQuantityChange(setEppEquipo)(item, value)}
-                                                                min="0"
-                                                                darkMode={darkMode}
-                                                            />
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+                                                {EPPEQUIPOITEMS.map(item => (
+                                                    <div
+                                                        key={item}
+                                                        className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}
+                                                    >
+                                                        {/* Título del item */}
+                                                        <label className="text-sm font-medium block">{item}</label>
+                                                        
+                                                        {/* Container para stepper y observaciones - LAYOUT MEJORADO */}
+                                                        <div className="space-y-3">
+                                                            {/* Stepper con más espacio en móvil */}
+                                                            <div className="flex justify-start">
+                                                                <NumberInput
+                                                                    value={eppEquipo[item].cantidad}
+                                                                    onChange={(value) => handleListQuantityChange(setEppEquipo)(item, value)}
+                                                                    min={0}
+                                                                    darkMode={darkMode}
+                                                                />
+                                                            </div>
+                                                            
+                                                            {/* Campo de observaciones en línea separada */}
                                                             <input
                                                                 type="text"
-                                                                className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
-                                                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
+                                                                className={`w-full px-3 py-2 border rounded text-sm ${
+                                                                    darkMode 
+                                                                        ? 'bg-gray-700 border-gray-600' 
+                                                                        : 'border-amber-300 bg-white'
                                                                 }`}
                                                                 placeholder="Observaciones"
                                                                 value={eppEquipo[item].observaciones}
@@ -1905,21 +1916,27 @@ const BombForm = ({ onBack }) => {
                                                     <button
                                                         type="button"
                                                         className={`rounded-md border px-3 py-1 text-sm ${
-                                                            darkMode
-                                                                ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
+                                                            darkMode 
+                                                                ? 'border-gray-300 text-gray-300 hover:bg-gray-700' 
                                                                 : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                                                         }`}
-                                                        onClick={() => setEppEquipoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
+                                                        onClick={() =>
+                                                            setEppEquipoCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])
+                                                        }
                                                     >
                                                         Añadir otro
                                                     </button>
                                                 </div>
+                                                
                                                 {eppEquipoCustom.length === 0 ? (
-                                                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                                                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                        No hay ítems personalizados aún.
+                                                    </p>
                                                 ) : (
                                                     <div className="space-y-3">
                                                         {eppEquipoCustom.map((row, idx) => (
-                                                            <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                                                            <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
+                                                                {/* Nombre del item */}
                                                                 <input
                                                                     type="text"
                                                                     className={`px-2 py-1 border rounded ${
@@ -1927,31 +1944,53 @@ const BombForm = ({ onBack }) => {
                                                                     }`}
                                                                     placeholder="Nombre del ítem"
                                                                     value={row.item}
-                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                                                    onChange={(e) =>
+                                                                        setEppEquipoCustom(prev =>
+                                                                            prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r))
+                                                                        )
+                                                                    }
                                                                 />
-                                                                <NumberInput
-                                                                    value={row.cantidad}
-                                                                    onChange={(value) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                                                    min="0"
-                                                                    darkMode={darkMode}
-                                                                />
+                                                                
+                                                                {/* Stepper con espacio completo */}
+                                                                <div className="flex justify-start">
+                                                                    <NumberInput
+                                                                        value={row.cantidad}
+                                                                        onChange={(value) =>
+                                                                            setEppEquipoCustom(prev =>
+                                                                                prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r))
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                        darkMode={darkMode}
+                                                                    />
+                                                                </div>
+                                                                
+                                                                {/* Observaciones */}
                                                                 <input
                                                                     type="text"
-                                                                    className={`px-2 py-1 border rounded col-span-1 ${
+                                                                    className={`px-2 py-1 border rounded ${
                                                                         darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
                                                                     }`}
                                                                     placeholder="Observaciones"
                                                                     value={row.observaciones}
-                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                                                    onChange={(e) =>
+                                                                        setEppEquipoCustom(prev =>
+                                                                            prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r))
+                                                                        )
+                                                                    }
                                                                 />
+                                                                
+                                                                {/* Botón quitar */}
                                                                 <button
                                                                     type="button"
-                                                                    className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                                                        darkMode
-                                                                            ? 'border-red-500 text-red-400 hover:bg-red-900'
+                                                                    className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                                                        darkMode 
+                                                                            ? 'border-red-500 text-red-400 hover:bg-red-900' 
                                                                             : 'border-red-700 text-red-700 hover:bg-red-100'
                                                                     }`}
-                                                                    onClick={() => setEppEquipoCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                                                    onClick={() =>
+                                                                        setEppEquipoCustom(prev => prev.filter((_, i) => i !== idx))
+                                                                    }
                                                                 >
                                                                     Quitar
                                                                 </button>
