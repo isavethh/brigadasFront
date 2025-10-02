@@ -1330,18 +1330,6 @@ const BombForm = ({ onBack }) => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
             </div>
 
-            {/* Logo en la parte superior */}
-            <div className="relative w-full py-6 flex justify-center">
-                <div className="group relative">
-                    <img 
-                        src="/images/alas.png" 
-                        alt="Logo de la empresa" 
-                        className="w-24 h-24 sm:w-32 sm:h-32 object-contain transform group-hover:scale-105 transition-all duration-500 drop-shadow-lg" 
-                    />
-                </div>
-            </div>
-
-
             {/* Botón de modo oscuro flotante mejorado */}
             <button
                 onClick={toggleDarkMode}
