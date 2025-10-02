@@ -1193,7 +1193,7 @@ const BombForm = ({ onBack }) => {
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between gap-4">
-                    <div className="flex justify-between md:justify-start gap-4">
+                    <div className="flex items-center justify-between md:justify-start gap-4">
                         <button
                             type="button"
                             onClick={() => {
