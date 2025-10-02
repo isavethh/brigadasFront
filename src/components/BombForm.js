@@ -2002,110 +2002,104 @@ const BombForm = ({ onBack }) => {
                                         </div>
                                     </div>
                                 )}
-{/* Sección de Herramientas CON CUSTOM */}
-{activeSection === 'tools' && (
-    <div className="space-y-8">
-        <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent mb-4">
-                Herramientas
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Equipos y herramientas necesarios para las operaciones
-            </p>
-        </div>
+                                {/* Sección de Herramientas CON CUSTOM */}
+                                {activeSection === 'tools' && (
+                                    <div className="space-y-8">
+                                        <div className="text-center mb-8">
+                                            <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent mb-4">Herramientas</h2>
+                                            <p className="text-slate-600 dark:text-slate-300 text-lg">Equipos y herramientas necesarios para las operaciones</p>
+                                        </div>
+                                        
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+                                            {HERRAMIENTAS_ITEMS.map(item => (
+                                                <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                                                    <label className="text-sm font-medium block">{item}</label>
+                                                    <div className="space-y-3">
+                                                        <div className="flex justify-start">
+                                                            <NumberInput
+                                                                value={herramientas[item].cantidad}
+                                                                onChange={(value) => handleListQuantityChange(setHerramientas)(item, value)}
+                                                                min={0}
+                                                                darkMode={darkMode}
+                                                            />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className={`w-full px-3 py-2 border rounded text-sm ${
+                                                                darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
+                                                            }`}
+                                                            placeholder="Observaciones"
+                                                            value={herramientas[item].observaciones}
+                                                            onChange={(e) => handleListObsChange(setHerramientas)(item, e.target.value)}
+                                                            maxLength={400}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
-            {HERRAMIENTAS_ITEMS.map(item => (
-                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                    <label className="text-sm font-medium">{item}</label>
-                    <div className="flex items-center space-x-2">
-                        <NumberInput
-                            value={herramientas[item].cantidad}
-                            onChange={(value) => handleListQuantityChange(setHerramientas)(item, value)}
-                            min="0"
-                            darkMode={darkMode}
-                        />
-                        <input
-                            type="text"
-                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
-                                darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
-                            }`}
-                            placeholder="Observaciones"
-                            value={herramientas[item].observaciones}
-                            onChange={(e) => handleListObsChange(setHerramientas)(item, e.target.value)}
-                            maxLength={400}
-                        />
-                    </div>
-                </div>
-            ))}
-        </div>
+                                        {/* Herramientas - Otros */}
+                                        <div className={`${cardBg} p-4 rounded-lg border ${borderColor}`}>
+                                            <div className="mb-3 flex items-center justify-between">
+                                                <h3 className="font-semibold">Otros</h3>
+                                                <button
+                                                    type="button"
+                                                    className={`rounded-md border px-3 py-1 text-sm ${
+                                                        darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                                                    }`}
+                                                    onClick={() => setHerramientasCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
+                                                >
+                                                    Añadir otro
+                                                </button>
+                                            </div>
+                                            
+                                            {herramientasCustom.length === 0 ? (
+                                                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                    No hay ítems personalizados aún.
+                                                </p>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    {herramientasCustom.map((row, idx) => (
+                                                        <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
+                                                            <input
+                                                                type="text"
+                                                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                                                placeholder="Nombre del ítem"
+                                                                value={row.item}
+                                                                onChange={(e) => setHerramientasCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
+                                                            />
+                                                            <div className="flex justify-start">
+                                                                <NumberInput
+                                                                    value={row.cantidad}
+                                                                    onChange={(value) => setHerramientasCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                                                    min={0}
+                                                                    darkMode={darkMode}
+                                                                />
+                                                            </div>
+                                                            <input
+                                                                type="text"
+                                                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                                                placeholder="Observaciones"
+                                                                value={row.observaciones}
+                                                                onChange={(e) => setHerramientasCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                                                    darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
+                                                                }`}
+                                                                onClick={() => setHerramientasCustom(prev => prev.filter((_, i) => i !== idx))}
+                                                            >
+                                                                Quitar
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
 
-        {/* Herramientas - Otros */}
-        <div className={`${cardBg} p-4 rounded-lg border ${borderColor}`}>
-            <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-semibold">Otros</h3>
-                <button
-                    type="button"
-                    className={`rounded-md border px-3 py-1 text-sm ${
-                        darkMode
-                            ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                            : 'border-gray-700 text-gray-700 hover:bg-gray-200'
-                    }`}
-                    onClick={() => setHerramientasCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
-                >
-                    Añadir otro
-                </button>
-            </div>
-            {herramientasCustom.length === 0 ? (
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
-            ) : (
-                <div className="space-y-3">
-                    {herramientasCustom.map((row, idx) => (
-                        <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
-                            <input
-                                type="text"
-                                className={`px-2 py-1 border rounded ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Nombre"
-                                value={row.item}
-                                onChange={(e)=> setHerramientasCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
-                            />
-                            <NumberInput
-                                value={row.cantidad}
-                                onChange={(value) => setHerramientasCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                min="0"
-                                darkMode={darkMode}
-                            />
-                            <input
-                                type="text"
-                                className={`px-2 py-1 border rounded col-span-1 ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Observaciones"
-                                value={row.observaciones}
-                                onChange={(e)=> setHerramientasCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
-                            />
-                            <button
-                                type="button"
-                                className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                    darkMode
-                                        ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                        : 'border-red-700 text-red-700 hover:bg-red-100'
-                                }`}
-                                onClick={()=> setHerramientasCustom(prev => prev.filter((_,i)=> i!==idx))}
-                            >
-                                Quitar
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    </div>
-)}
 
 {/* Sección de Logística CON CUSTOM */}
 {activeSection === 'logistics' && (
@@ -2226,30 +2220,26 @@ const BombForm = ({ onBack }) => {
 {activeSection === 'food' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-4">
-                Alimentación
-            </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-lg">
-                Alimentos y bebidas necesarios para la brigada
-            </p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-4">Alimentación</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">Provisiones alimentarias para los operativos</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
->
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
             {ALIMENTACION_ITEMS.map(item => (
-                <div key={item} className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-2 sm:space-y-0`}
->
-                    <label className="text-sm font-medium">{item}</label>
-                    <div className="flex items-center space-x-2">
-                        <NumberInput
-                            value={alimentacion[item].cantidad}
-                            onChange={(value) => handleListQuantityChange(setAlimentacion)(item, value)}
-                            min="0"
-                            darkMode={darkMode}
-                        />
+                <div key={item} className={`${cardBg} p-3 sm:p-4 rounded-lg border ${borderColor} space-y-3`}>
+                    <label className="text-sm font-medium block">{item}</label>
+                    <div className="space-y-3">
+                        <div className="flex justify-start">
+                            <NumberInput
+                                value={alimentacion[item].cantidad}
+                                onChange={(value) => handleListQuantityChange(setAlimentacion)(item, value)}
+                                min={0}
+                                darkMode={darkMode}
+                            />
+                        </div>
                         <input
                             type="text"
-                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                            className={`w-full px-3 py-2 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2269,53 +2259,50 @@ const BombForm = ({ onBack }) => {
                 <button
                     type="button"
                     className={`rounded-md border px-3 py-1 text-sm ${
-                        darkMode
-                            ? 'border-gray-300 text-gray-300 hover:bg-gray-700'
-                            : 'border-gray-700 text-gray-700 hover:bg-gray-200'
+                        darkMode ? 'border-gray-300 text-gray-300 hover:bg-gray-700' : 'border-gray-700 text-gray-700 hover:bg-gray-200'
                     }`}
-                    onClick={() => setAlimentacionCustom(prev => [...prev, { item:'', cantidad:0, observaciones:'' }])}
+                    onClick={() => setAlimentacionCustom(prev => [...prev, { item: '', cantidad: 0, observaciones: '' }])}
                 >
                     Añadir otro
                 </button>
             </div>
+            
             {alimentacionCustom.length === 0 ? (
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No hay ítems personalizados aún.</p>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    No hay ítems personalizados aún.
+                </p>
             ) : (
                 <div className="space-y-3">
                     {alimentacionCustom.map((row, idx) => (
-                        <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+                        <div key={idx} className="grid grid-cols-1 gap-3 p-3 border rounded">
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
-                                placeholder="Nombre"
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
+                                placeholder="Nombre del ítem"
                                 value={row.item}
-                                onChange={(e)=> setAlimentacionCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
+                                onChange={(e) => setAlimentacionCustom(prev => prev.map((r, i) => (i === idx ? { ...r, item: e.target.value } : r)))}
                             />
-                            <NumberInput
-                                value={row.cantidad}
-                                onChange={(value) => setAlimentacionCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
-                                min="0"
-                                darkMode={darkMode}
-                            />
+                            <div className="flex justify-start">
+                                <NumberInput
+                                    value={row.cantidad}
+                                    onChange={(value) => setAlimentacionCustom(prev => prev.map((r, i) => (i === idx ? { ...r, cantidad: value } : r)))}
+                                    min={0}
+                                    darkMode={darkMode}
+                                />
+                            </div>
                             <input
                                 type="text"
-                                className={`px-2 py-1 border rounded col-span-1 ${
-                                    darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                                }`}
+                                className={`px-2 py-1 border rounded ${darkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'}`}
                                 placeholder="Observaciones"
                                 value={row.observaciones}
-                                onChange={(e)=> setAlimentacionCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                onChange={(e) => setAlimentacionCustom(prev => prev.map((r, i) => (i === idx ? { ...r, observaciones: e.target.value } : r)))}
                             />
                             <button
                                 type="button"
-                                className={`justify-self-end rounded-md border px-3 py-1 text-sm ${
-                                    darkMode
-                                        ? 'border-red-500 text-red-400 hover:bg-red-900'
-                                        : 'border-red-700 text-red-700 hover:bg-red-100'
+                                className={`justify-self-start rounded-md border px-3 py-1 text-sm ${
+                                    darkMode ? 'border-red-500 text-red-400 hover:bg-red-900' : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={()=> setAlimentacionCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                onClick={() => setAlimentacionCustom(prev => prev.filter((_, i) => i !== idx))}
                             >
                                 Quitar
                             </button>
@@ -2326,6 +2313,7 @@ const BombForm = ({ onBack }) => {
         </div>
     </div>
 )}
+
 
 {/* Sección de Equipo de Campo CON CUSTOM */}
 {activeSection === 'camp' && (
