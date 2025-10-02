@@ -91,18 +91,14 @@ function App() {
       {/* Logo styled */}
       <div className="relative w-full py-4 sm:py-6 flex justify-center">
         <div className="group relative">
-          <div className="flex items-center gap-2 sm:gap-4 bg-white/95 rounded-xl px-3 sm:px-4 py-2 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
-            <div className="flex items-center justify-center w-10 sm:w-14 h-10 sm:h-14 bg-white rounded-full shadow-inner">
-              <img src={alas} alt="Logo" className="w-7 sm:w-10 h-7 sm:h-10 object-contain" />
-            </div>
-            <div className="text-left">
-              <div className="text-slate-800 font-extrabold text-base sm:text-lg leading-tight">ALAS</div>
-              <div className="text-slate-600 font-semibold text-xs sm:text-sm tracking-widest">CHIQUITANAS</div>
-            </div>
-          </div>
+          <img 
+            src={alas} 
+            alt="Logo" 
+            className="w-16 sm:w-24 h-16 sm:h-24 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
+          />
         </div>
       </div>
-
+      
       <div className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in">
         <div className="text-center mb-8 sm:mb-16 animate-slide-up">
           <h1 className="text-3xl sm:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 bg-clip-text text-transparent animate-gradient-x leading-tight pb-2">
