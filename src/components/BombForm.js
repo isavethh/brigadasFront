@@ -1204,7 +1204,7 @@ const BombForm = ({ onBack }) => {
                                 }
                             }}
                             disabled={currentIndex === 0}
-                            className={`group px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                            className={`group px-6 py-3 h-12 rounded-xl font-medium transition-all duration-300 ${
                                 currentIndex === 0
                                     ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
                                     : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-2 border-amber-300 dark:border-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:border-amber-400 dark:hover:border-amber-500 transform hover:scale-105'
@@ -1234,7 +1234,7 @@ const BombForm = ({ onBack }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className={`group px-8 py-3 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 ${
+                            className={`group px-6 sm:px-8 py-3 h-12 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 ${
                                 isSubmitting
                                     ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed'
                                     : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 hover:shadow-lg hover:shadow-amber-500/25'
