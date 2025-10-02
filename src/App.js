@@ -89,7 +89,7 @@ function App() {
       </div>
 
       {/* Logo styled */}
-      <div className="relative w-full py-6 sm:py-8 flex justify-center">
+      <div className="relative w-full py-2 sm:py-4 flex justify-center">
         <div className="group relative">
           <img 
             src={alas} 
