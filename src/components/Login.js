@@ -34,7 +34,7 @@ const Login = ({ onLogin, onBack }) => {
             </div>
 
             {/* 📱 LOGO RESPONSIVE */}
-            <div className="relative w-full sm:py-4 flex justify-center">
+            <div className="relative w-full flex justify-center items-start">
                 <div className="group relative">
                     <img 
                         src={alas} 
