@@ -91,43 +91,67 @@ const SECTIONS = [
 ];
 
 // 🎨 Componente de input numérico mejorado con colores amarillos
+// Componente de input numérico mejorado con colores amarillos
 const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode = false, ...props }) => {
     const handleIncrement = () => onChange(Math.min(value + 1, max || Infinity));
     const handleDecrement = () => onChange(Math.max(value - 1, min));
 
     return (
-        <div className={`inline-flex items-center whitespace-nowrap rounded-md overflow-hidden border min-w-[72px] ${className} ${darkMode ? 'border-amber-600/50 bg-slate-800/50' : 'border-amber-300/50 bg-white'}`}>
+        <div className={`inline-flex items-center whitespace-nowrap rounded-md overflow-hidden border 
+            min-w-[100px] sm:min-w-[120px] ${className} 
+            ${darkMode 
+                ? 'border-amber-600/50 bg-slate-800/50' 
+                : 'border-amber-300/50 bg-white'
+            }`}>
+            {/* Botón Decrementar */}
             <button
                 type="button"
                 onClick={handleDecrement}
-                className={`px-2 py-1 text-sm flex-shrink-0 min-w-[28px] ${darkMode ? 'bg-red-600 text-white' : 'bg-red-500 text-white'}`}
+                className={`px-2 sm:px-3 py-1 text-sm font-bold flex-shrink-0 min-w-[32px] sm:min-w-[36px] h-[32px] sm:h-[36px]
+                    flex items-center justify-center transition-colors duration-200
+                    ${darkMode 
+                        ? 'bg-red-600 text-white hover:bg-red-500' 
+                        : 'bg-red-500 text-white hover:bg-red-400'
+                    }`}
                 aria-label="Decrementar"
                 disabled={value <= min}
             >
-                −
+                <span className="text-base leading-none">−</span>
             </button>
+
+            {/* Campo de input numérico */}
             <input
                 type="number"
                 value={value}
                 min={min}
                 max={max}
                 onChange={(e) => onChange(parseInt(e.target.value) || min)}
-                className={`w-12 sm:w-16 px-2 py-1 text-center text-sm font-medium flex-shrink-0 ${darkMode ? 'bg-slate-700 text-amber-100' : 'bg-amber-50 text-slate-800'}`} 
+                className={`w-16 sm:w-20 px-2 py-1 text-center text-sm font-medium flex-shrink-0 border-none outline-none
+                    ${darkMode 
+                        ? 'bg-slate-700 text-amber-100' 
+                        : 'bg-amber-50 text-slate-800'
+                    }`}
                 {...props}
             />
+
+            {/* Botón Incrementar */}
             <button
                 type="button"
                 onClick={handleIncrement}
-                className={`px-2 py-1 text-sm flex-shrink-0 min-w-[28px] ${darkMode ? 'bg-emerald-600 text-white' : 'bg-emerald-500 text-white'}`}
+                className={`px-2 sm:px-3 py-1 text-sm font-bold flex-shrink-0 min-w-[32px] sm:min-w-[36px] h-[32px] sm:h-[36px]
+                    flex items-center justify-center transition-colors duration-200
+                    ${darkMode 
+                        ? 'bg-emerald-600 text-white hover:bg-emerald-500' 
+                        : 'bg-emerald-500 text-white hover:bg-emerald-400'
+                    }`}
                 aria-label="Incrementar"
                 disabled={max !== undefined && value >= max}
             >
-                +
+                <span className="text-base leading-none">+</span>
             </button>
         </div>
     );
 };
-
 
 const BombForm = ({ onBack }) => {
     const [darkMode, setDarkMode] = useState(false);
