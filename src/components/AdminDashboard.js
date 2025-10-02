@@ -58,31 +58,7 @@ const AdminDashboard = ({ onBack }) => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 sm:w-80 h-32 sm:h-80 bg-amber-400/5 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-500"></div>
             </div>
 
-            {/* 📱 HEADER COMPLETAMENTE RESPONSIVE */}
-            <div className="relative p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto space-y-4 sm:space-y-0">
-                    <div className="flex items-center animate-slide-up">
-                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-white/95 rounded-lg flex items-center justify-center shadow-lg mr-3 sm:mr-4">
-                            <img src={alas} alt="logo" className="h-6 sm:h-8 w-6 sm:w-8 object-contain" />
-                        </div>
-                        <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent text-center sm:text-left">
-                            Panel de Administración
-                        </h2>
-                    </div>
-                    
-                    {onBack && (
-                        <button
-                            onClick={onBack}
-                            className="group bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-white font-bold px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/25 animate-slide-up text-sm sm:text-base"
-                        >
-                            <div className="flex items-center">
-                                <span className="text-base sm:text-lg mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
-                                <span className="group-hover:mr-1 transition-all duration-300">Volver al inicio</span>
-                            </div>
-                        </button>
-                    )}
-                </div>
-            </div>
+            
 
             {/* 📱 CONTENIDO PRINCIPAL RESPONSIVE */}
             <div className="relative container mx-auto px-4 sm:px-6 py-4 sm:py-8">
