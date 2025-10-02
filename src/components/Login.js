@@ -34,16 +34,15 @@ const Login = ({ onLogin, onBack }) => {
             </div>
 
             {/* 📱 LOGO RESPONSIVE */}
-            <div className="relative w-full flex justify-center items-start">
-                <div className="group relative">
-                    <img 
-                        src={alas} 
-                        alt="Logo" 
-                        className="w-24 sm:w-40 h-24 sm:h-40 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
-                    />
-                </div>
-            </div>
-
+            <div className="relative w-full flex justify-center items-start mb-2 sm:mb-6">
+  <div className="group relative">
+    <img 
+      src={alas} 
+      alt="Logo" 
+      className="w-20 h-16 sm:w-40 sm:h-40 object-contain drop-shadow-2xl transform group-hover:scale-105 transition-all duration-500" 
+    />
+  </div>
+</div>
             {/* 📱 CONTENEDOR PRINCIPAL RESPONSIVE */}
             <div className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in min-h-[calc(100vh-100px)]">
                 {/* 📱 BOTÓN DE REGRESAR RESPONSIVE */}
