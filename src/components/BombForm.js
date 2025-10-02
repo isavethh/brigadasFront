@@ -1333,16 +1333,14 @@ const BombForm = ({ onBack }) => {
             {/* Logo en la parte superior */}
             <div className="relative w-full py-6 flex justify-center">
                 <div className="group relative">
-                    <div className="w-32 h-16 bg-white/95 rounded-xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-500">
-                        <img 
-                            src="/path/to/your/logo.png" 
-                            alt="Logo de la empresa" 
-                            className="max-w-full max-h-full object-contain"
-                        />
-                        <span className="text-slate-700 font-bold text-base tracking-wide">LOGO</span>
-                    </div>
+                    <img 
+                        src="/images/alas.png" 
+                        alt="Logo de la empresa" 
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-contain transform group-hover:scale-105 transition-all duration-500 drop-shadow-lg" 
+                    />
                 </div>
             </div>
+
 
             {/* Botón de modo oscuro flotante mejorado */}
             <button
