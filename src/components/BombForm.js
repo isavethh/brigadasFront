@@ -341,7 +341,7 @@ const BombForm = ({ onBack }) => {
         }));
     };
 
-    // Validar sección actual con más detalle
+    // Validar sección actual with more details
     const validateSection = (sectionId) => {
         const section = SECTIONS.find(s => s.id === sectionId);
         if (!section || !section.required) return true;
@@ -1193,26 +1193,26 @@ const BombForm = ({ onBack }) => {
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between gap-4">
-                    <div className="flex items-center justify-between md:justify-start gap-4">
+                    {/* Prev (left) */}
+                    <div className="flex items-center justify-start">
                         <button
                             type="button"
                             onClick={() => {
                                 if (currentIndex > 0) {
                                     setActiveSection(SECTIONS[currentIndex - 1].id);
-                                    // previously hid summary; keep navigation logic
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }
                             }}
                             disabled={currentIndex === 0}
-                            className={`group px-6 py-3 h-12 rounded-xl font-medium transition-all duration-300 ${
+                            className={`group flex items-center justify-center px-4 sm:px-6 py-3 h-12 rounded-xl transition-all duration-300 ${
                                 currentIndex === 0
                                     ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
-                                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-2 border-amber-300 dark:border-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:border-amber-400 dark:hover:border-amber-500 transform hover:scale-105'
+                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 hover:scale-105'
                             }`}
                             aria-label="Anterior"
                         >
-                            <div className="flex items-center justify-center">
-                                <svg className="h-6 w-6 sm:mr-2 text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                            <div className="flex items-center justify-center gap-2">
+                                <svg className="h-5 w-5 text-current sm:mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                                     <path d="M9 6l6 6-6 6" transform="rotate(180 12 12)" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 <span className="hidden sm:inline">Anterior</span>
@@ -1220,6 +1220,7 @@ const BombForm = ({ onBack }) => {
                         </button>
                     </div>
 
+                    {/* Right side: optional message + Next/Finish */}
                     <div className="flex items-center justify-end gap-4">
                         {submitStatus.message && !submitStatus.isFinal && (
                             <div className={`px-4 py-3 rounded-xl font-medium ${
@@ -1234,43 +1235,27 @@ const BombForm = ({ onBack }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className={`group px-6 sm:px-8 py-3 h-12 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 ${
+                            className={`group flex items-center justify-center px-4 sm:px-6 py-3 h-12 rounded-xl text-white transition-all duration-300 ${
                                 isSubmitting
                                     ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed'
                                     : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 hover:shadow-lg hover:shadow-amber-500/25'
                             }`}
                             aria-label={isLastSection ? 'Finalizar' : 'Siguiente'}
                         >
-                            {isLastSection ? (
-                                isSubmitting ? (
-                                    <div className="flex items-center">
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        <span className="hidden sm:inline">Finalizando...</span>
-                                        <svg className="h-6 w-6 sm:hidden text-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                            <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center justify-center">
-                                        <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
-                                        <svg className="h-6 w-6 text-current sm:hidden transform group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                                            <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                    </div>
-                                )
+                            {/* Inner layout identical to Prev: icon + label (label hidden on mobile) */}
+                            {isSubmitting ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span className="hidden sm:inline">{isLastSection ? 'Finalizando...' : 'Guardando...'}</span>
+                                    <span className="sm:hidden text-lg">…</span>
+                                </div>
                             ) : (
-                                isSubmitting ? (
-                                    <div className="flex items-center">
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        <span className="hidden sm:inline">Guardando...</span>
-                                        <span className="sm:hidden text-2xl leading-none">…</span>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center justify-center">
-                                        <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Siguiente</span>
-                                        <span className="text-2xl leading-none sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
-                                    </div>
-                                )
+                                <div className="flex items-center justify-center gap-2">
+                                    <span className="hidden sm:inline">{isLastSection ? 'Finalizar' : 'Siguiente'}</span>
+                                    <svg className="h-5 w-5 text-current sm:ml-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                        <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
                             )}
                         </button>
                     </div>
@@ -1388,7 +1373,9 @@ const BombForm = ({ onBack }) => {
                                 </div>
                             </div>
                             <div className="bg-white/20 px-6 py-3 rounded-xl backdrop-blur-sm">
-                                <p className="text-sm font-medium">Sección: <span className="font-bold text-lg">{SECTIONS[currentSectionIndex]?.name}</span></p>
+                                <p className="text-sm font-medium">Sección: <span className="font-bold text-lg">{
+                                    SECTIONS.find(s => s.id === activeSection)?.name || 'Desconocida'
+                                }</span></p>
                             </div>
                         </div>
                     </div>
@@ -1908,11 +1895,11 @@ const BombForm = ({ onBack }) => {
                                                                     }`}
                                                                     placeholder="Nombre del ítem"
                                                                     value={row.item}
-                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i) => i===idx ? { ...r, item: e.target.value } : r))}
+                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, item: e.target.value } : r))}
                                                                 />
                                                                 <NumberInput
                                                                     value={row.cantidad}
-                                                                    onChange={(value) => setEppEquipoCustom(prev => prev.map((r,i) => i===idx ? { ...r, cantidad: value } : r))}
+                                                                    onChange={(value) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, cantidad: value } : r))}
                                                                     min="0"
                                                                     darkMode={darkMode}
                                                                 />
@@ -1923,7 +1910,7 @@ const BombForm = ({ onBack }) => {
                                                                     }`}
                                                                     placeholder="Observaciones"
                                                                     value={row.observaciones}
-                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i) => i===idx ? { ...r, observaciones: e.target.value } : r))}
+                                                                    onChange={(e) => setEppEquipoCustom(prev => prev.map((r,i)=> i===idx ? { ...r, observaciones: e.target.value } : r))}
                                                                 />
                                                                 <button
                                                                     type="button"
@@ -1971,7 +1958,7 @@ const BombForm = ({ onBack }) => {
                         />
                         <input
                             type="text"
-                           className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
+                            className={`w-full sm:w-40 px-2 py-1 border rounded text-sm ${
                                 darkMode ? 'bg-gray-700 border-gray-600' : 'border-amber-300 bg-white'
                             }`}
                             placeholder="Observaciones"
@@ -2047,8 +2034,7 @@ const BombForm = ({ onBack }) => {
             )}
         </div>
     </div>
-)
-}
+)}
 
 {/* Sección de Logística CON CUSTOM */}
 {activeSection === 'logistics' && (
@@ -2788,7 +2774,7 @@ const BombForm = ({ onBack }) => {
                                         ? 'border-red-500 text-red-400 hover:bg-red-900'
                                         : 'border-red-700 text-red-700 hover:bg-red-100'
                                 }`}
-                                onClick={()=> setRescateAnimalCustom(prev => prev.filter((_,i)=> i!==idx))}
+                                onClick={() => setRescateAnimalCustom(prev => prev.filter((_,i)=> i!==idx))}
                             >
                                 Quitar
                             </button>
@@ -2796,18 +2782,20 @@ const BombForm = ({ onBack }) => {
                     ))}
                 </div>
             )}
+
         </div>
     </div>
 )}
 
-                                {/* Navegación inferior */}
-                                {renderNavigation()}
-                            </>
-                        )}
-                    </div>
-                </form>
-            </div>
-        </div>
+                {/* Navegación inferior */}
+                {renderNavigation()}
+
+            </>
+        )}
+    </div>
+    </form>
+    </div>
+    </div>
     );
 };
 
