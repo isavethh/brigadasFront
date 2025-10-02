@@ -2315,7 +2315,7 @@ const BombForm = ({ onBack }) => {
 )}
 
 {/* Sección de Equipo de Campo CON CUSTOM */}
-{activeSection === 'field' && (
+{activeSection === 'camp' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">Equipo de Campo</h2>
@@ -2411,6 +2411,7 @@ const BombForm = ({ onBack }) => {
         </div>
     </div>
 )}
+
 
 {/* Sección de Limpieza e Higiene CON CUSTOM */}
 {activeSection === 'hygiene' && (
@@ -2608,7 +2609,7 @@ const BombForm = ({ onBack }) => {
 
 
 {/* Sección de Medicamentos CON CUSTOM */}
-{activeSection === 'medical' && (
+{activeSection === 'meds' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent mb-4">Medicamentos</h2>
@@ -2707,7 +2708,7 @@ const BombForm = ({ onBack }) => {
 
 
 {/* Sección de Rescate Animal CON CUSTOM */}
-{activeSection === 'rescue' && (
+{activeSection === 'animals' && (
     <div className="space-y-8">
         <div className="text-center mb-8">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">Rescate Animal</h2>
