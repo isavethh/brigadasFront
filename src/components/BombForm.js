@@ -92,29 +92,15 @@ const SECTIONS = [
 
 // 🎨 Componente de input numérico mejorado con colores amarillos
 const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode = false, ...props }) => {
-    const handleIncrement = () => {
-        onChange(Math.min(value + 1, max || Infinity));
-    };
-
-    const handleDecrement = () => {
-        onChange(Math.max(value - 1, min));
-    };
+    const handleIncrement = () => onChange(Math.min(value + 1, max || Infinity));
+    const handleDecrement = () => onChange(Math.max(value - 1, min));
 
     return (
-        
-        <div className={`flex items-center rounded-lg overflow-hidden border transition-all duration-300 ${
-            darkMode 
-                ? 'border-amber-600/50 bg-slate-800/50 hover:border-amber-500' 
-                : 'border-amber-300/50 bg-white hover:border-amber-400'
-        } ${className}`}>
+        <div className={`inline-flex items-center whitespace-nowrap rounded-md overflow-hidden border min-w-[72px] ${className} ${darkMode ? 'border-amber-600/50 bg-slate-800/50' : 'border-amber-300/50 bg-white'}`}>
             <button
                 type="button"
                 onClick={handleDecrement}
-                className={`px-3 py-2 transition-all duration-300 ${
-                    darkMode
-                        ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white hover:from-red-500 hover:to-orange-500'
-                        : 'bg-gradient-to-r from-red-500 to-orange-500 text-white hover:from-red-400 hover:to-orange-400'
-                } disabled:opacity-50`}
+                className={`px-2 py-1 text-sm flex-shrink-0 min-w-[28px] ${darkMode ? 'bg-red-600 text-white' : 'bg-red-500 text-white'}`}
                 aria-label="Decrementar"
                 disabled={value <= min}
             >
@@ -126,21 +112,13 @@ const NumberInput = ({ value, onChange, min = 0, max, className = '', darkMode =
                 min={min}
                 max={max}
                 onChange={(e) => onChange(parseInt(e.target.value) || min)}
-                className={`w-16 px-2 py-2 text-center font-medium ${
-                    darkMode
-                        ? 'bg-slate-700 text-amber-100'
-                        : 'bg-amber-50 text-slate-800'
-                } focus:outline-none`}
+                className={`w-12 sm:w-16 px-2 py-1 text-center text-sm font-medium flex-shrink-0 ${darkMode ? 'bg-slate-700 text-amber-100' : 'bg-amber-50 text-slate-800'}`} 
                 {...props}
             />
             <button
                 type="button"
                 onClick={handleIncrement}
-                className={`px-3 py-2 transition-all duration-300 ${
-                    darkMode
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500'
-                        : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400'
-                } disabled:opacity-50`}
+                className={`px-2 py-1 text-sm flex-shrink-0 min-w-[28px] ${darkMode ? 'bg-emerald-600 text-white' : 'bg-emerald-500 text-white'}`}
                 aria-label="Incrementar"
                 disabled={max !== undefined && value >= max}
             >
@@ -164,7 +142,7 @@ const BombForm = ({ onBack }) => {
     const [completedSections, setCompletedSections] = useState({});
     const [formErrors, setFormErrors] = useState({});
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-    const [showSummary, setShowSummary] = useState(false);
+    // showSummary deprecated: use activeSection === 'summary'
     const formRef = useRef();
 
     // Obtener colores de la sección actual
@@ -395,7 +373,7 @@ const BombForm = ({ onBack }) => {
     const goToSection = (sectionId) => {
         if (validateSection(activeSection)) {
             setActiveSection(sectionId);
-            setShowSummary(false);
+            // previously hid the summary; now navigate to current section (no-op)
             window.scrollTo({ top: 0, behavior: 'smooth' });
             setSubmitStatus({ success: null, message: '' });
             return true;
@@ -667,7 +645,7 @@ const BombForm = ({ onBack }) => {
 
             if (isLastSection) {
                 setSubmitStatus({ success: true, message: '¡Formulario completado con éxito!', isFinal: true });
-                setShowSummary(true);
+                setActiveSection('summary');
             } else {
                 setSubmitStatus({ success: true, message: 'Sección guardada correctamente. Avanzando...' });
                 setActiveSection(SECTIONS[currentIndex + 1].id);
@@ -1221,7 +1199,7 @@ const BombForm = ({ onBack }) => {
                             onClick={() => {
                                 if (currentIndex > 0) {
                                     setActiveSection(SECTIONS[currentIndex - 1].id);
-                                    setShowSummary(false);
+                                    // previously hid summary; keep navigation logic
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }
                             }}
@@ -1231,10 +1209,11 @@ const BombForm = ({ onBack }) => {
                                     ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
                                     : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-2 border-amber-300 dark:border-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:border-amber-400 dark:hover:border-amber-500 transform hover:scale-105'
                             }`}
+                            aria-label="Anterior"
                         >
                             <div className="flex items-center">
                                 <span className="text-lg mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
-                                <span>Anterior</span>
+                                <span className="hidden sm:inline">Anterior</span>
                             </div>
                         </button>
                     </div>
@@ -1258,28 +1237,31 @@ const BombForm = ({ onBack }) => {
                                     ? 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed'
                                     : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 hover:shadow-lg hover:shadow-amber-500/25'
                             }`}
+                            aria-label={isLastSection ? 'Finalizar' : 'Siguiente'}
                         >
                             {isLastSection
                                 ? (isSubmitting ? (
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        Finalizando...
+                                        <span className="hidden sm:inline">Finalizando...</span>
+                                        <span className="sm:hidden">⤓</span>
                                     </div>
                                 ) : (
                                     <div className="flex items-center">
-                                        <span className="mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
-                                        <span className="text-xl">🎯</span>
+                                        <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Finalizar</span>
+                                        <span className="text-xl sm:hidden">→</span>
                                     </div>
                                 ))
                                 : (isSubmitting ? (
                                     <div className="flex items-center">
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        Guardando...
+                                        <span className="hidden sm:inline">Guardando...</span>
+                                        <span className="sm:hidden">…</span>
                                     </div>
                                 ) : (
                                     <div className="flex items-center">
-                                        <span className="mr-2 group-hover:mr-3 transition-all duration-300">Siguiente</span>
-                                        <span className="text-lg transform group-hover:translate-x-1 transition-transform">→</span>
+                                        <span className="hidden sm:inline mr-2 group-hover:mr-3 transition-all duration-300">Siguiente</span>
+                                        <span className="text-lg sm:hidden transform group-hover:translate-x-1 transition-transform">→</span>
                                     </div>
                                 ))}
                         </button>
@@ -1440,7 +1422,7 @@ const BombForm = ({ onBack }) => {
                     <div className="p-4 sm:p-8"
 >
                         {/* Mostrar resumen si está finalizado */}
-                        {submitStatus.isFinal && showSummary ? (
+                        {submitStatus.isFinal && isSummarySection ? (
                             <>
                                 <div className={`mb-8 rounded-xl p-6 border-2 ${
                                     submitStatus.success
